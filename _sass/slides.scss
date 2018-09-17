@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+// Fonts
+$base-font-family: 'Open Sans', sans-serif !default;
+$heading-font-family: 'Montserrat', sans-serif !default;
+$monospace-font-family: 'Menlo', monospace !default;
+
+// Colors
+$text-color:    #000 !default;
+$brand-color:   #E30714 !default;
+
+// Sizes
+$spacing-unit: 8px;
+
+@import "slides/base";

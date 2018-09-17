@@ -1,0 +1,447 @@
+layout: true
+<img class="logo" src="/images/logo-full.svg" />
+
+---
+class: middle, left
+# 01 - Introduction
+.subheading[Development environment]
+
+---
+layout: true
+<img class="logo" src="/images/logo.svg" />
+
+---
+## What are we going to do in this course ?
+- Have fun 🎉
+- Prepare our portfolio 💼
+- Build web applications with modern tools, libraries and techniques 🤓
+- Use Javascript on the client and the server
+
+---
+class: middle, center
+<a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">
+  <img src="/images/01-learn-javascript-2016.png" width="auto" height="600px">
+</a>
+---
+class: middle, center
+<a href="https://stateofjs.com/">
+  <img src="/images/01-stateofjs.png" width="100%" height="auto">
+</a>
+
+---
+## What’s the most in-demand web development skills for 2018 ?
+
+---
+## Planning
+1 semester = 16 weeks
+
+|                 |                   |
+| :-------------- | :---------------- |
+| 5 weeks         | Github Analytics  |
+| 8 weeks         | Social App        |
+| 3 weeks         | Wrap up           |
+
+---
+## Daily menu
+
+- Setup our development environment.
+- Introduce a first set of tools that will make us better and happier
+- Study the anatomy of a dynamic web page.
+
+---
+name: developer-productivity
+## What tools should I use to be a productive developer ?
+
+.section[
+  > I could use a simple text editor to write HTML and Javascript.
+]
+
+.section[
+  > I could debug my code with `console.log('argh')`.
+]
+
+.section[
+  > I could assemble my web application manually, repeating same tasks over and over again.
+]
+
+.section[
+  > I would **lose time** and deliver **lower quality** software.
+]
+
+---
+layout: true
+<img class="logo" src="/images/logo.svg" />
+.breadcrumbs[[Developer productivity](#developer-productivity)]
+
+---
+## Solution
+
+- Invest time to make most of your IDE.
+- Use a debugger on the client and on the server side.
+- Use a build pipeline and take advantage of various automated tasks.
+
+---
+## In practice
+
+- Microsoft Visual Studio Code
+- Debug client-side code
+- Node.js & npm (nvm)
+- Debug server-side code
+- Let’s start without a build pipeline
+
+---
+layout: true
+name: development-environment
+<img class="logo" src="/images/logo.svg" />
+
+---
+
+## Development environment
+
+For this course, you'll need to install the following tools.
+
+- A decent browser with developer tools - Google Chrome.
+- A code editor - we recommend Microsoft Visual Studio Code
+
+---
+layout: true
+<img class="logo" src="/images/logo.svg" />
+.breadcrumbs[[Development environment](#development-environment)]
+
+---
+## Install Node.js
+
+Node.js is an open-source and cross-platform runtime environment used for development of server-side web applications
+
+There is two different ways to install Node.js
+
+1. Go to the [download page](https://nodejs.org/en/download/), get the installer for your system and launch it. Be sure to install the version labeled LTS
+
+2. (Recommended) Install Node.js via [Node Version Manager](https://github.com/creationix/nvm) (nvm) which is a command line tool that let you install several node versions at the same time and switch between them as you wish.
+
+
+---
+## Install Node.js via nvm
+
+To install or update nvm, you can use the install script using cURL. Copy and past the following command into your terminal:
+```sh
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+
+When the installation has completed familiarize yourself with common commands:
+
+- `nvm current` - Display currently activated version of Node.js
+- `nvm list` - List installed versions
+- `nvm install <version>` - Install a specific version number
+- `nvm use <version>` - Switch to another version
+
+> Note: nvm does not support Windows but you can use [nvm-windows]() as an alternative which has a similar interface.
+
+---
+name: install-live-server
+## Install live-server
+
+Along with the node command you also have access to a command called [npm](https://docs.npmjs.com/getting-started/what-is-npm). npm stands for Node Package Manager and gives you access to an enormous collection of modules created by the community one of them is [live-server](https://www.npmjs.com/package/live-server).
+
+Live server is a little development server written in Node with hot reload capability. It'll save you time by reloading your page after changes to your files.
+
+Open your **terminal** and type the following command:
+
+```sh
+npm install -g live-server
+```
+
+---
+name: test-live-server
+## Test live-server
+
+You can easily test your server by creating a directory with an index.html file.
+
+```sh
+$ mkdir html-playground
+$ cd html-playground
+$ echo '<h1>Hello world!</h1>' > index.html
+```
+
+Then run the following command from the directory you just created:
+```sh
+$ live-server
+```
+
+Your default browser should open an page at `http://127.0.0.1:8080/`. Try make some changes to the `index.html` file and hit save. You should instantly see those changes reflected in your browser.
+
+> Your page looks ugly ? Don't worry we'll soon make it a bit better.
+
+---
+layout: true
+<img class="logo" src="/images/logo.svg" />
+
+---
+## Debug client-side code
+
+Now we'll see how a set of development tools called [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/) can increase our productivity.
+
+Chrome DevTools can do a lot - code-coverage and memory analysis, benchmarking, mobile device simulation and the list goes on and on. 
+
+For now we'll see the most commonly used features
+
+- Editing any web page on the fly
+- Debugging network activities
+- Debugging Javascript
+
+You'll discover other tools as you need them when working on your projects.
+
+---
+### Setup a project structure
+
+Open the `html-playground` project you just created with Visual Studio Code
+> Pro tip: Open a project with Visual Studio Code from your terminal by running `code .` from your project directory.
+
+And setup a basic project structure by adding a script and a stylesheet.
+
+```diff
+ html-playground
+ ├── index.html
++├── css
++│   └──styles.css
++└──js
++    └──app.js
+```
+
+---
+### Write a simple web page
+Write a simple page that loads your stylesheet and your script - then launch live-server and open your [http://localhost:8080](http://localhost:8080) with Google Chrome.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+*    <link href="/css/style.css" rel="stylesheet">
+     <title>HTML playground</title>
+  </head>
+  <body>
+     <h1>Welcome TWEB 2018</h1>
+*    <script src="/js/app.js"></script>
+  </body>
+</html>
+```
+
+.pull-left[
+  ```css
+  /* css/style.css */
+  h1 {
+    color: blue;
+    text-align: center; 
+  }
+  ```
+]
+
+.pull-right[
+  ```javascript
+  /* js/app.js */
+  var msg = 'hello console';
+  console.log(msg);
+  ```
+]
+
+---
+### Chrome DevTools - Network
+Once the page is open, launch Chrome DevTools with a `right-click` on the page > and choose `Inspect`.
+In the `Network` tab you'll see all requested resources with a lot of useful information.
+
+The figure below shows that browser first requested our HTML file - listed as `localhost`. Once the HTML was fully downloaded and parsed, the browser request two other resources *almost* at the same time - `style.css` then `app.js`.
+
+<img src="/images/01-devtools-network.png" width="100%" height="auto">
+
+---
+### Chrome DevTools - Elements
+
+`Elements` tab is where you can debug your HTML page and CSS. It allows you to see which CSS rules is being applied to any element.
+
+You can event edit your HTML on the fly or modify any
+<img src="/images/01-devtools-elements.png" width="100%" height="auto">
+
+---
+### Chrome DevTools - Console
+<img src="/images/01-devtools-console.png" width="100%" height="auto">
+
+---
+### Chrome DevTools - Debugger
+To use the debugger navigate to the `Sources` tab and place a breakpoint at any javascript line.
+
+.row[
+  <img style="margin-right: 1.5em;" src="/images/01-devtools-sources.png" width="500px" height="auto">
+
+  .smaller[
+    You can debug the code injected by `live-server` at the end of your `index.html` file to understand how it automatically reloads your page
+  ]
+]
+
+---
+## Debug server-side code
+
+---
+## How do I know if I write *good* javascript? 
+
+.section[
+  > With Java, the **compiler** detects some of my mistakes. With Javascript,I often lose time because of typos and silly mistakes.
+]
+
+.section[
+  > Javascript is evolving a lot and I am not sure if my **coding style** needs an upgrade.
+]
+
+---
+## Solution
+- Use coding guidelines
+- Learn from others
+- Enforce the rules in the IDE and in the build process
+
+---
+## In practice
+
+- Create your JS project with npm
+- Install ESLint
+- Configure ESLint
+- Launch Visual Studio Code
+
+---
+## ESLint
+ESLint is a popular linting utility for Javascript that is frequently used to find **problematic patterns** or code that doesn’t adhere to certain **style guidelines**
+- It provides a level of **clarity** to your code
+- It makes your code easier to **read** and **maintain**
+- It can analyze your code and warn you of **potential errors**.
+
+When configured and integrated in your code editor, ESLint will warn you as you type. See the following example in Visual Studio Code.
+
+![Eslint at work in VSCode](/images/01-eslint-vscode.gif)
+
+---
+## Airbnb JavaScript Style Guide
+Eslint was designed in pluggable way to allow developers to create their own linting rules.
+
+[Airbnb maintains a very popular style guide](https://github.com/airbnb/javascript)
+which is a set of ESLint rules that you can use and extend.
+
+The documentation explains the reason for their choices for each rule. Here is [an example](https://github.com/airbnb/javascript#variables) with the rules called: `no-undef` and `prefer-const`.
+
+> Always use `const` or `let` to declare variables. Not doing so will result in global variables. We want to avoid polluting the global namespace. Captain Planet warned us of that.
+
+```javascript
+// bad
+superPower = new SuperPower();
+
+// good
+const superPower = new SuperPower();
+```
+
+---
+## Install ESLint
+
+There is to ways to install ESLint.
+- locally **(recommended)** - including ESLint as our project development dependency. Run the following command from your project directory:
+```sh
+npm install --save-dev eslint
+```
+This will create the `node_modules` directory in your current directory (if one doesn't exist yet) and will download the package to that directory.
+
+
+- globally - By running this command in your terminal:
+```sh
+npm install -g eslint
+```
+As we did earlier [when we installed live-server](#install-live-server), the `-g` or `--global` argument will cause npm to install the package globally rather than locally
+
+
+---
+## Configure ESLint
+Once installed locally, you can run the `init` command which will help you setup a configuration file.
+
+```sh
+$ ./node_modules/.bin/eslint --init
+```
+
+Then answer the questions like bellow to configure ESLint with Airbnb's Javascript Style Guide:
+
+```sh
+? How would you like to configure ESLint? Use a popular style guide
+? Which style guide do you want to follow? Airbnb
+? Do you use React? No
+? What format do you want your config file to be in? JavaScript
+? Would you like to install them now with npm? Yes
+```
+
+---
+## Configure ESLint
+After running `eslint --init` you'll have a `.eslintrc.js` file in your project directory.
+This file includes the line:
+
+```javascript
+"extends": "airbnb-base"
+```
+
+Which turns on all rules listed in [Airbnb Style Guide](https://github.com/airbnb/javascript).
+You can use this file to customize your rules according to your team code style. 
+
+For example, if you fell tired of semicolons (which are required by default in
+[`airbnb-base`](https://github.com/airbnb/javascript/blob/master/packages/eslint-config-airbnb-base/rules/style.js#L448)) you can customize the [`semi`](https://eslint.org/docs/rules/semi#require-or-disallow-semicolons-instead-of-asi-semi) rule to warn whenever they are used:
+
+```json
+"extends": "airbnb-base"
+"rules": {
+    "semi": ["warn", "never"],
+},
+```
+
+Or simply disable the rule with `"semi": "off"`. for more configuration options and details,
+see the [configuration docs](https://eslint.org/docs/user-guide/configuring)
+
+
+---
+## Use ESLint
+
+ESLint comes with a command line utility which you just used to run the `init` step.
+The following command **runs ESLint on every `.js` files** in the project root directory
+and prints out all errors and warnings:
+
+```sh
+$ ./node_modules/.bin/eslint **.js
+```
+
+----
+
+This is equivalent to adding an npm script in your `package.json`
+
+```json
+// package.json
+"scripts": {
+  "lint": "eslint **.js"
+}
+```
+
+then run `npm run lint`.
+
+npm will spawn a shell and run `eslint **.js`.
+The shell environment has your `./node_modules/.bin` folder added to the `PATH`
+which means any of the dependencies you have that install binaries will be runnable directly.
+
+---
+## Use ESLint
+
+In general you won't often use ESLint command line interface directly as it'll be redundant.
+
+- The command line interface is generally integrated inside a **build pipeline** to prevent for example developers from deploying low quality code - many projects prevents `git commit` when the `lint` step fails.
+
+- The command line interface can be used by code editors to **highlight errors** as you type or **automatically fix errors** for you. This is what we'll see next by integrating ESLint in Visual Studio Code. 
+
+---
+## ESLint in Visual Studio Code
+
+Open Visual Studio Code and search for ESLint in the `Extensions` pan. Click on the `Install` button then restart VS Code.
+
+<figure>
+  <img src="/images/01-eslint-extension.png" width="100%" height="auto" alt="ESLint extension">
+  <figcaption>ESLint extension</figcaption>
+</figure>
+
+When the extension is installed - VSCode will look for the `eslint` binary in your project dependencies and the `.eslintrc.js` configuration file to start analyzing your code. And that's it 🎉!

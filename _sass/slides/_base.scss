@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,600|Open+Sans:400,700');
+
+@font-face {
+  font-family: 'Menlo';
+  src: url('/fonts/Menlo-Regular.ttf') format('ttf');
+}
+
+.remark-container {
+  /**
+   * Basic styling
+   */
+  body {
+    font-family: $base-font-family;
+    font-weight: normal;
+    background: #fff;
+  }
+  
+  iframe {
+    height: 100%;
+  }
+
+  .remark-slide-scaler {
+    box-shadow: none;
+  }
+
+  /**
+   * Headings
+   */
+  h1,
+  h2,
+  h3 {
+    font-family: $heading-font-family;
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+
+  h1 {
+    font-size: 2.7em;
+    font-weight: 600;
+    padding-bottom: 0.2em;
+    border-bottom: 2px solid rgba(0,0,0, .12);
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 2em;
+    font-weight: 600;
+    margin-top: 1em;
+  }
+
+  h3 {
+    font-size: 1.6em;
+    font-weight: 600;
+  }
+
+  .subheading {
+    font-weight: 300;
+    font-size: 2em;
+    margin: 0.35em 0 0 0;
+  }
+
+  /**
+   * Code formatting
+   */
+  pre,
+  code {
+    font-family: 'Menlo', monospace;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+
+  .remark-inline-code {
+    background: #F3F4F4;
+    font-size: 90%;
+  }
+
+  .remark-code {
+    background: #F6F8FA !important;
+  }
+
+  /**
+   * Blockquote
+   */
+  blockquote {
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.25em solid #dfe2e5;
+    margin: 0 0 1em;
+  }
+
+  /**
+   * Links
+   */
+   a {
+    color: $brand-color;
+    text-decoration: none;
+   }
+
+   /**
+    * Logo
+    */
+  .logo {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: auto;
+    height: 83px;
+  }
+
+  /**
+   * Breadcrumbs
+   */
+  .breadcrumbs {
+    font-family: $heading-font-family;
+    font-weight: 600;
+    font-size: 0.85em;
+    position: absolute;
+    top: 30px;
+  }
+  
+  .breadcrumbs a {
+    color: rgba(0,0,0,.54);
+  }
+  
+  .breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+
+  /**
+   * Layout
+   */
+  .section {
+    margin-top: 2em;
+  }
+  
+  .pull-left {
+    float: left;
+    width: 47%;
+  }
+  .pull-right {
+    float: right;
+    width: 47%;
+  }
+  .pull-right ~ p {
+    clear: both;
+  }
+  
+  .row {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .smaller {
+    font-size: 0.85em;
+  }
+  
+  .bigger {
+    font-size: 1.25em;
+  }
+  
+  .block {
+    padding: 1em;
+  }
+}
