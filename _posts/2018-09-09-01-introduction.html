@@ -1,5 +1,13 @@
+---
+title: Introduction
+date: 2018-09-20 07:17:00 +0200
+src: /slides/01-Introduction.md
+categories: slides
+excerpt: |
+  Learn the building blocks of the web - HTML and CSS ! Learning how to create the structure of a webpage and how to use Javascript and the DOM to control page content and interactions. Get started with Node.JS - writing and debugging a server app.
+---
 layout: true
-<img class="logo" src="/images/logo-full.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
 
 ---
 class: middle, left
@@ -8,7 +16,7 @@ class: middle, left
 
 ---
 layout: true
-<img class="logo" src="/images/logo.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 
 ---
 ## What are we going to do in this course ?
@@ -20,12 +28,12 @@ layout: true
 ---
 class: middle, center
 <a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">
-  <img src="/images/01-learn-javascript-2016.png" width="auto" height="600px">
+  <img src="{{site.baseurl}}/images/01-learn-javascript-2016.png" width="auto" height="600px">
 </a>
 ---
 class: middle, center
 <a href="https://stateofjs.com/">
-  <img src="/images/01-stateofjs.png" width="100%" height="auto">
+  <img src="{{site.baseurl}}/images/01-stateofjs.png" width="100%" height="auto">
 </a>
 
 ---
@@ -70,7 +78,7 @@ name: developer-productivity
 
 ---
 layout: true
-<img class="logo" src="/images/logo.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 .breadcrumbs[[Developer productivity](#developer-productivity)]
 
 ---
@@ -92,7 +100,7 @@ layout: true
 ---
 layout: true
 name: development-environment
-<img class="logo" src="/images/logo.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 
 ---
 
@@ -105,7 +113,7 @@ For this course, you'll need to install the following tools.
 
 ---
 layout: true
-<img class="logo" src="/images/logo.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 .breadcrumbs[[Development environment](#development-environment)]
 
 ---
@@ -174,7 +182,7 @@ Your default browser should open an page at `http://127.0.0.1:8080/`. Try make s
 
 ---
 layout: true
-<img class="logo" src="/images/logo.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 
 ---
 ## Debug client-side code
@@ -251,7 +259,7 @@ In the `Network` tab you'll see all requested resources with a lot of useful inf
 
 The figure below shows that browser first requested our HTML file - listed as `localhost`. Once the HTML was fully downloaded and parsed, the browser request two other resources *almost* at the same time - `style.css` then `app.js`.
 
-<img src="/images/01-devtools-network.png" width="100%" height="auto">
+<img src="{{site.baseurl}}/images/01-devtools-network.png" width="100%" height="auto">
 
 ---
 ### Chrome DevTools - Elements
@@ -259,18 +267,18 @@ The figure below shows that browser first requested our HTML file - listed as `l
 `Elements` tab is where you can debug your HTML page and CSS. It allows you to see which CSS rules is being applied to any element.
 
 You can event edit your HTML on the fly or modify any
-<img src="/images/01-devtools-elements.png" width="100%" height="auto">
+<img src="{{site.baseurl}}/images/01-devtools-elements.png" width="100%" height="auto">
 
 ---
 ### Chrome DevTools - Console
-<img src="/images/01-devtools-console.png" width="100%" height="auto">
+<img src="{{site.baseurl}}/images/01-devtools-console.png" width="100%" height="auto">
 
 ---
 ### Chrome DevTools - Debugger
 To use the debugger navigate to the `Sources` tab and place a breakpoint at any javascript line.
 
 .row[
-  <img style="margin-right: 1.5em;" src="/images/01-devtools-sources.png" width="500px" height="auto">
+  <img style="margin-right: 1.5em;" src="{{site.baseurl}}/images/01-devtools-sources.png" width="500px" height="auto">
 
   .smaller[
     You can debug the code injected by `live-server` at the end of your `index.html` file to understand how it automatically reloads your page
@@ -314,7 +322,7 @@ ESLint is a popular linting utility for Javascript that is frequently used to fi
 
 When configured and integrated in your code editor, ESLint will warn you as you type. See the following example in Visual Studio Code.
 
-![Eslint at work in VSCode](/images/01-eslint-vscode.gif)
+![Eslint at work in VSCode]({{site.baseurl}}/images/01-eslint-vscode.gif)
 
 ---
 ## Airbnb JavaScript Style Guide
@@ -440,7 +448,7 @@ In general you won't often use ESLint command line interface directly as it'll b
 Open Visual Studio Code and search for ESLint in the `Extensions` pan. Click on the `Install` button then restart VS Code.
 
 <figure>
-  <img src="/images/01-eslint-extension.png" width="100%" height="auto" alt="ESLint extension">
+  <img src="{{site.baseurl}}/images/01-eslint-extension.png" width="100%" height="auto" alt="ESLint extension">
   <figcaption>ESLint extension</figcaption>
 </figure>
 

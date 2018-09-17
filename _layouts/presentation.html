@@ -7,12 +7,14 @@
   <title>{{ page.title | strip_html }}</title>
   <link rel="stylesheet" href="{{ "/assets/slides.css" | relative_url }}">
 </head>
-
 <body>
+    <textarea id="source" style="display:none;">
+{{ content }}
+    </textarea>
   <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
   <script>
     var slideshow = remark.create({
-      sourceUrl: '{{page.src}}',
+      //sourceUrl: '{{page.src | relative_url }}',
       ratio: '4:3',
       highlightStyle: 'github-gist',
       highlightLines: true,
