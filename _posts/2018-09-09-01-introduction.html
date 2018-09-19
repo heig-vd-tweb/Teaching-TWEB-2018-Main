@@ -20,16 +20,25 @@ layout: true
 
 ---
 ## What are we going to do in this course ?
+
+.bigger[
 - Have fun 🎉
 - Prepare our portfolio 💼
-- Build web applications with modern tools, libraries and techniques 🤓
+- Build production-ready web applications 🚀
+- Use modern tools, libraries and techniques 🤓
 - Use Javascript on the client and the server
+]
 
 ---
 class: middle, center
 <a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">
   <img src="{{site.baseurl}}/images/01-learn-javascript-2016.png" width="auto" height="600px">
 </a>
+---
+<video preload="auto" controls muted poster="https://img-9gag-fun.9cache.com/photo/a88yRWZ_460swp.webp" loop="loop" width="100%" height="auto">
+  <source src="https://img-9gag-fun.9cache.com/photo/a88yRWZ_460sv.mp4" type="video/mp4"> 
+  <source src="https://img-9gag-fun.9cache.com/photo/a88yRWZ_460svwm.webm" type="video/webm">
+</video>
 ---
 class: middle, center
 <a href="https://stateofjs.com/">
@@ -41,14 +50,36 @@ class: middle, center
 
 ---
 ## Planning
-1 semester = 16 weeks
 
-|                 |                   |
-| :-------------- | :---------------- |
-| 5 weeks         | Github Analytics  |
-| 8 weeks         | Social App        |
-| 3 weeks         | Wrap up           |
-
+<table>
+  <tr>
+    <td>1 week</td>
+    <td>HTML5 / CSS3 / JS</td>
+    <td><span class="badge secondary">Labo</span></td>
+  </tr>
+  <tr>
+    <td>4 weeks</td>
+    <td><b>Github Analytics</b></td>
+    <td><span class="badge primary">Project</span></td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td>2 weeks</td>
+    <td>React / Graphql</td>
+    <td><span class="badge secondary">Labo</span><span class="badge warning">TE1</span></td>
+  </tr>
+  <tr>
+    <td>6 weeks</td>
+    <td><b>Social App</b></td>
+    <td><span class="badge primary">Project</span></td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td>3 weeks</td>
+    <td>Wrap up</td>
+    <td><span class="badge warning">TE2</span></td>
+  </tr>
+</table>
 ---
 ## Daily menu
 
@@ -266,22 +297,29 @@ The figure below shows that browser first requested our HTML file - listed as `l
 
 `Elements` tab is where you can debug your HTML page and CSS. It allows you to see which CSS rules is being applied to any element.
 
-You can event edit your HTML on the fly or modify any
+You can also edit your HTML or CSS rules. This is really great for prototyping and debugging. 
+
 <img src="{{site.baseurl}}/images/01-devtools-elements.png" width="100%" height="auto">
 
 ---
 ### Chrome DevTools - Console
+
+When something doesn't work as expected with your site, your first reaction should be checking the `Console` and see
+if any error was reported.
+
+In addition to viewing logging and error messages, you can also use the Console to evaluate arbitrary Javascript. 
+
 <img src="{{site.baseurl}}/images/01-devtools-console.png" width="100%" height="auto">
 
 ---
 ### Chrome DevTools - Debugger
-To use the debugger navigate to the `Sources` tab and place a breakpoint at any javascript line.
+The `Sources` tab is where you can debug your code using breakpoints.  A breakpoint lets you pause your code in the middle of its execution, and examine all values at that moment in time.
 
 .row[
   <img style="margin-right: 1.5em;" src="{{site.baseurl}}/images/01-devtools-sources.png" width="500px" height="auto">
 
   .smaller[
-    You can debug the code injected by `live-server` at the end of your `index.html` file to understand how it automatically reloads your page
+    Try debugging the code injected by `live-server` at the end of your `index.html` file to understand how it automatically reloads your page
   ]
 ]
 

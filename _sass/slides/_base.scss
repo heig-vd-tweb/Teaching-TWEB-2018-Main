@@ -127,6 +127,72 @@
   }
 
   /**
+   * Tables
+   */
+   table {
+     display: table;
+     width: 100%;
+     border-spacing: 0;
+     border-collapse: collapse;
+     margin: 1.25em 0;
+    
+     tr {
+       height: 48px;
+     }
+
+     td {
+      padding: 4px 56px 4px 24px;
+      border-bottom: 1px solid rgba(224, 224, 224, 1);
+      &:last-child {
+        padding-right: 24px;
+      }
+     }
+   }
+
+   /**
+    * Badges
+    */
+    .badge {
+      display: inline-block;
+      padding: 0.1em 0.4em;
+      background: #007bff;
+      color: #fff;
+      border-radius: 3px;
+      font-size: 0.875em;
+      margin-right: 0.4em;
+
+      &.primary {
+        background: #007bff;
+      }
+
+      &.secondary {
+        background: #6C757D;
+      }
+
+      &.success {
+        background: #28A745;
+      }
+
+      &.danger {
+        background: #DB3545;
+      }
+
+      &.warning {
+        color: #212528;
+        background: #FFC108;
+      }
+
+      &.light {
+        color: #212528;
+        background: #F8F9FA;
+      }
+
+      &.dark {
+        background: #343A40;
+      }
+    }
+
+  /**
    * Layout
    */
   .section {
