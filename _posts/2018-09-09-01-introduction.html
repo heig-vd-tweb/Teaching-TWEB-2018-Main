@@ -32,21 +32,30 @@ layout: true
 ---
 class: middle, center
 <a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">
-  <img src="{{site.baseurl}}/images/01-learn-javascript-2016.png" width="auto" height="600px">
+<figure>
+  <img src="{{site.baseurl}}/images/01-learn-javascript-2016.png" width="auto" height="530px">
+  <figcaption><small>https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f</small></figcaption>
+</figure>
 </a>
+
+
+
 ---
 <video preload="auto" controls muted poster="https://img-9gag-fun.9cache.com/photo/a88yRWZ_460swp.webp" loop="loop" width="100%" height="auto">
   <source src="https://img-9gag-fun.9cache.com/photo/a88yRWZ_460sv.mp4" type="video/mp4"> 
   <source src="https://img-9gag-fun.9cache.com/photo/a88yRWZ_460svwm.webm" type="video/webm">
 </video>
 ---
-class: middle, center
-<a href="https://stateofjs.com/">
-  <img src="{{site.baseurl}}/images/01-stateofjs.png" width="100%" height="auto">
-</a>
+## How to Keep Up ?
 
----
-## What’s the most in-demand web development skills for 2018 ?
+Javascript community is constantly evolving so it can be hard to keep up. If you don't know
+how here is some suggestions:
+- check sites like [BestOfJS](https://bestofjs.org/) or [StateOfJS](https://stateofjs.com/)
+- Watch conferences and meetups recordings like [JSConf](https://www.youtube.com/channel/UCzoVCacndDCfGDf41P-z0iA)
+- Follow people on [Twitter](https://twitter.com/)
+- Subscribe to subreddits on [Reddit](https://www.reddit.com/)
+- See what's popular on [Codepen](http://codepen.io/popular/)
+- **Discuss and debate with you friends and colleagues**
 
 ---
 ## Planning
@@ -80,32 +89,27 @@ class: middle, center
     <td><span class="badge warning">TE2</span></td>
   </tr>
 </table>
+
 ---
 ## Daily menu
 
+.bigger[
 - Setup our development environment.
 - Introduce a first set of tools that will make us better and happier
 - Study the anatomy of a dynamic web page.
+]
 
 ---
 name: developer-productivity
 ## What tools should I use to be a productive developer ?
 
-.section[
-  > I could use a simple text editor to write HTML and Javascript.
-]
+> I could use a simple text editor to write HTML and Javascript.
 
-.section[
-  > I could debug my code with `console.log('argh')`.
-]
+> I could debug my code with `console.log('argh')`.
 
-.section[
-  > I could assemble my web application manually, repeating same tasks over and over again.
-]
+> I could assemble my web application manually, repeating same tasks over and over again.
 
-.section[
-  > I would **lose time** and deliver **lower quality** software.
-]
+> I would **lose time** and deliver **lower quality** software.
 
 ---
 layout: true
@@ -115,37 +119,30 @@ layout: true
 ---
 ## Solution
 
+.bigger[
 - Invest time to make most of your IDE.
 - Use a debugger on the client and on the server side.
 - Use a build pipeline and take advantage of various automated tasks.
+]
 
 ---
 ## In practice
 
+.bigger[
 - Microsoft Visual Studio Code
 - Debug client-side code
 - Node.js & npm (nvm)
 - Debug server-side code
 - Let’s start without a build pipeline
+]
 
 ---
-layout: true
-name: development-environment
-<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
-
----
-
 ## Development environment
 
 For this course, you'll need to install the following tools.
 
 - A decent browser with developer tools - Google Chrome.
 - A code editor - we recommend Microsoft Visual Studio Code
-
----
-layout: true
-<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
-.breadcrumbs[[Development environment](#development-environment)]
 
 ---
 ## Install Node.js
@@ -216,6 +213,7 @@ layout: true
 <img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 
 ---
+name: debug-client-side
 ## Debug client-side code
 
 Now we'll see how a set of development tools called [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/) can increase our productivity.
@@ -229,6 +227,11 @@ For now we'll see the most commonly used features
 - Debugging Javascript
 
 You'll discover other tools as you need them when working on your projects.
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Debug client-side code](#debug-client-side)]
 
 ---
 ### Setup a project structure
@@ -324,6 +327,23 @@ The `Sources` tab is where you can debug your code using breakpoints.  A breakpo
 ]
 
 ---
+### References
+
+- Client-side debugging (Webcast)  
+  https://youtu.be/qAVGS85SmSg
+
+- Viewing And Changing CSS
+  https://developers.google.com/web/tools/chrome-devtools/css/
+
+- Debugging JavaScript in Chrome DevTools
+  https://developers.google.com/web/tools/chrome-devtools/javascript/
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+name: debug-server-side
 ## Debug server-side code
 
 Visual Studio Code has an integrated debugger that you can use to debug your server-side code. 
@@ -338,6 +358,12 @@ Let's create a boring Node.js server that respond `Hello world` to all requests:
  ├── package.json
  └── server.js
 ```
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Debug server-side code](#debug-server-side)]
+
 ---
 ### Creating a simple server
 
@@ -401,7 +427,7 @@ To start debugging, select the `Debug View` in the Activity Bar then click on th
 <img src="{{site.baseurl}}/images/01-vscode-launch-debug.png" width="250px">
 
 ---
-### Resources
+### References
 
 - Webcast - Setup server-side debugging  
   https://youtu.be/YMqIChybZCE
@@ -409,8 +435,12 @@ To start debugging, select the `Debug View` in the Activity Bar then click on th
 - Debugging in Visual Studio Code
   https://code.visualstudio.com/docs/editor/debugging
 
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 
 ---
+name: code-quality
 ## How do I know if I write *good* javascript? 
 
 .section[
@@ -422,18 +452,28 @@ To start debugging, select the `Debug View` in the Activity Bar then click on th
 ]
 
 ---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Code quality](#code-quality)]
+
+---
 ## Solution
+
+.bigger[
 - Use coding guidelines
 - Learn from others
 - Enforce the rules in the IDE and in the build process
+]
 
 ---
 ## In practice
 
+.bigger[
 - Create your JS project with npm
 - Install ESLint
 - Configure ESLint
 - Launch Visual Studio Code
+]
 
 ---
 ## ESLint
@@ -575,3 +615,15 @@ Open Visual Studio Code and search for ESLint in the `Extensions` pan. Click on 
 </figure>
 
 When the extension is installed - VSCode will look for the `eslint` binary in your project dependencies and the `.eslintrc.js` configuration file to start analyzing your code. And that's it 🎉!
+
+---
+## References
+
+- ESLint: configure and test in Visual Studio Code (Webcast)
+  https://youtu.be/53IM2NYMH4Q
+
+- Configuring ESLint  
+  https://eslint.org/docs/user-guide/configuring
+
+- Airbnb JavaScript Style Guide  
+  https://github.com/airbnb/javascript
