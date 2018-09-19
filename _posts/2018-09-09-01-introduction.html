@@ -326,6 +326,90 @@ The `Sources` tab is where you can debug your code using breakpoints.  A breakpo
 ---
 ## Debug server-side code
 
+Visual Studio Code has an integrated debugger that you can use to debug your server-side code. 
+
+Let's create a boring Node.js server that respond `Hello world` to all requests:
+- Create a folder for your project. I call it `node-playground`.
+- Run `npm init` from your project directory. This will create a `package.json` file.
+- Create an `server.js` file. This is where you'll write your code.
+
+```diff
+ node-playground
+ ├── package.json
+ └── server.js
+```
+---
+### Creating a simple server
+
+No need for any external libraries to create an HTTP server with Node.
+In this example, we use Node's http module which is loaded on the first line. 
+
+- We use the `createServer` function to define a callback that should respond to any incoming request,
+  also known as: `request handler`
+- We define a port that the server should listen to for requests.
+
+```javascript
+// server.js
+const http = require('http');
+const port = 8080;
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello world!');
+});
+
+// Start the server
+server.listen(port, () => {
+  console.log(`Magic happens at http://localhost:${port}`);
+});
+```
+---
+### Test your server
+
+To run a node program, use the `node` command and pass in a filename to execute. 
+Start your server by running the following command in your terminal.
+
+```sh
+$ node server.js
+```
+
+Then point you browser to [http://localhost:8080](http://localhost:8080) to see some magic.
+
+<img src="{{site.baseurl}}/images/01-hello-server.png" width="100%" height="auto">
+
+---
+### Debugging your server
+
+As with Chrome DevTools, Visual Studio Code lets you add breakpoints to our code and
+inspect the execution.
+
+- You can debug **server-side** code - Launching your server in debug mode or attaching the debugger to a running process.
+
+- You can also debug **client-side** code - Using the [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome) extension.
+
+> But for now, we'll just see how to debug our hello world server.
+
+---
+### Debugging your server
+
+To set a breakpoint in `server.js`, put the editor cursor on a line and press `F9` or click in the editor left gutter next to the line numbers. A red circle will appear in the gutter.
+
+<img src="{{site.baseurl}}/images/01-vscode-breakpoint.png" height="100px">
+
+To start debugging, select the `Debug View` in the Activity Bar then click on the Debug tool bar green arrow or press `F5`. 
+
+<img src="{{site.baseurl}}/images/01-vscode-launch-debug.png" width="250px">
+
+---
+### Resources
+
+- Webcast - Setup server-side debugging  
+  https://youtu.be/YMqIChybZCE
+
+- Debugging in Visual Studio Code
+  https://code.visualstudio.com/docs/editor/debugging
+
+
 ---
 ## How do I know if I write *good* javascript? 
 
