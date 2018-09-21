@@ -173,14 +173,6 @@ layout: true
 ## Introducing...
 ### ...James Nolan! (15.11.2018)
 
---
-
-<img src="{{site.baseurl}}/images/james1.jpg" alt="Censured Content" width="auto" height="400px">
-
----
-count: false
-## Introducing...
-### ...James Nolan! (15.11.2018)
 <img src="{{site.baseurl}}/images/james2.jpg" width="auto" height="400px">
 
 ---
@@ -294,20 +286,42 @@ npm install -g live-server
 name: test-live-server
 ## Test live-server
 
-You can easily test your server by creating a directory with an index.html file.
+You can easily test your server by creating a directory with an `index.html` file.
 
 ```sh
 $ mkdir html-playground
 $ cd html-playground
-$ echo '<h1>Hello world!</h1>' > index.html
+$ touch index.html
 ```
 
-Then run the following command from the directory you just created:
+Then write a simple and valid HTML document. A Valid HTML document contains at least a
+`DOCTYPE` declaration, `html`, `head` and `body` tags.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>HTML playground</title>
+  </head>
+  <body>
+    <h1>Welcome TWEB 2018</h1>
+  </body>
+</html>
+```
+
+> Note that the structure of your HTML document must be valid
+for live-server to be able to automatically reload your page.
+
+---
+## Test live-server
+
+Now we are good to go. Run the following command from the directory you just created:
 ```sh
 $ live-server
 ```
 
-Your default browser should open an page at `http://127.0.0.1:8080/`. Try make some changes to the `index.html` file and hit save. You should instantly see those changes reflected in your browser.
+Your default browser should open an page at `http://127.0.0.1:8080/`. Try making changes to the `index.html` file and hit save. You should instantly see those changes reflected in your browser.
 
 > Your page looks ugly ? Don't worry we'll soon make it a bit better.
 
@@ -361,8 +375,9 @@ Write a simple page that loads your stylesheet and your script - then launch liv
 <!DOCTYPE html>
 <html>
   <head>
-*    <link href="/css/style.css" rel="stylesheet">
+     <meta charset="UTF-8">
      <title>HTML playground</title>
+*    <link href="/css/style.css" rel="stylesheet">
   </head>
   <body>
      <h1>Welcome TWEB 2018</h1>
