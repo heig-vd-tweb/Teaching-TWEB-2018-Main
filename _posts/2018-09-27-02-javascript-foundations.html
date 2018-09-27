@@ -23,11 +23,15 @@ layout: true
 .bigger[
 - Introduction to Javascript
 - Javascript foundations
-- Async programming
+- Asynchronous programming
 - Expand our development environment
   - Add a testing framework
   - Make it a learning environment
 ]
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
 
 ---
 class: center, middle
@@ -40,12 +44,14 @@ layout: true
 .breadcrumbs[[Introduction to Javascript](#introduction-to-javascript)]
 
 ---
-### Facts
+### Javascript language
 
 .bigger[
-- Javascript was written in only **10 days**
-- Some people thinks it's a **mess** when others thinks that it's the **best** language ever
-- A lot of data analysis platforms prove that it is the **most popular** technology in the engineering world
+- Javascript was written in only [10 days](http://speakingjs.com/es5/ch04.html)
+- Some people thinks it's a **mess** while others think that it's **great**
+- A lot of data analysis platforms prove that it is one of the **most popular** technology in the engineering world
+  - [StackOverflow survey 2018](https://insights.stackoverflow.com/survey/2018#most-popular-technologies)
+  - [Jetbrains survey 2018](https://www.jetbrains.com/research/devecosystem-2018/)
 ]
 
 ---
@@ -55,30 +61,28 @@ layout: true
 - **Simplicity**: Simple to learn and implement
 - **Productivity**: Fast deployment, test and debug without *compilation* process
 - **Platform Independence**: Executes on any device where there exists a special program called the JavaScript engine - Browsers, servers, desktop/mobile apps.
-- **Speed**: Thanks to existing javascript engines, its execution is really, really fast !
+- **Speed**: Thanks to existing javascript engines, it keeps getting faster every year !
 ]
 
 ---
 ### Javascript performance
 .smaller[
-Javascript wasn’t designed to be fast and for the first decade, it wasn’t fast - until the introduction of  **just-in-time compilers** (JIT) in **javascript engines**. Execution of JS was 10x faster.
+Javascript wasn’t designed to be fast and for the first decade, it wasn’t fast - after the introduction of  **just-in-time compilers** (JIT) in **javascript engines**, it became 10x faster.
 ]
 
 <img src="{{site.baseurl}}/images/02-javascript-peformance.png" height="450px" width="auto" alt="javascript performance">
 
 ---
-### What is a javascript engine?
+### Wait, what is a javascript engine?
 
 A javascript engine, sometimes called "JavaScript virtual machine", take the JavaScript code that a developer writes and convert it to fast, optimized code that can be interpreted by a browser or even embedded into an application.
 
 Each JavaScript engine implements a version of ECMAScript, of which JavaScript is a dialect
 
-- <a href="https://en.wikipedia.org/wiki/V8_(JavaScript_engine)">V8</a> – in Google Chrome and Opera.
+- **<a href="https://en.wikipedia.org/wiki/V8_(JavaScript_engine)">V8</a> – in Google Chrome and Opera, as well in Node.js**
 - [SpiderMonkey](https://en.wikipedia.org/wiki/SpiderMonkey) - in Mozilla Firefox.
 - [JavaScriptCore](https://en.wikipedia.org/wiki/WebKit#JavaScriptCore) - in Safari
 - <a href="https://en.wikipedia.org/wiki/Chakra_(JavaScript_engine)">Chakra</a> - in Microsoft Edge
-
-> The engine used in Node.js is V8
 
 ---
 ### How V8 works?
@@ -102,8 +106,23 @@ The translation happens ahead of time. Takes necessary time to optimize the code
 Mixing different types of compilers to get rid of the interpreter’s inefficiency.
 
 - **Monitor** (profiler) - Identifies hot functions as they execute and what types are used.
-- **Baseline compiler** - A fast compiler that produces unoptimized code
+- **Baseline compiler** - A fast compiler that produces unoptimized code. (almost equivalent to an interpreter)
 - **Optimizing compiler** - A slower compiler that produces fast, optimized code.
+
+---
+### V8' Just-in-time compiler
+
+1. When first executing the JavaScript code, the `baseline compiler` is used to start executing machine code very fast.
+2. During the execution, `the monitor` runs in an other thread and identifies hot functions that should be optimized and gathers statistics.
+3. The `Optimizing compiler` optimizes hot functions in an other thread. Theses optimizations are based on assumptions made by the `monitor`
+4. If assumptions aren't valid anymore, the execution goes back to the `baseline compiler` version. This process is called deoptimization.
+
+---
+### References
+
+- [Lin Clark: A Cartoon Intro to WebAssembly | JSConf EU 2017](https://youtu.be/HktWin_LPf4)
+- [How JavaScript works - inside the V8 engine](https://blog.sessionstack.com/how-javascript-works-inside-the-v8-engine-5-tips-on-how-to-write-optimized-code-ac089e62b12e)
+- [JavaScript Start-up Performance](https://medium.com/reloading/javascript-start-up-performance-69200f43b201)
 
 ---
 ### What can in-browser JavaScript do?
@@ -133,7 +152,7 @@ JavaScript’s abilities in the browser are limited for the sake of the user’s
 layout: false
 class: center, middle
 name: javascript-foundations
-<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
 ## Javascript foundations
 
 ---
@@ -233,7 +252,7 @@ Boolean("0")  // true
 ---
 ### Comparison
 
-When comparing values of different types, they are converted to numbers.
+When comparing values of different types, they are **converted to numbers**.
 
 ```javascript
 '2' > 1 // true, string '2' becomes a number 2
@@ -383,13 +402,13 @@ console.log(userName) // paul, not modified by the function
 ```
 
 ---
-### Closures
+### What's the output of this function?
 
 ```javascript
 let name = "Paul";
 
 function sayHi() {
-  alert("Hi, " + name);
+  console.log("Hi, " + name);
 }
 
 name = "Miguel";
@@ -398,15 +417,15 @@ sayHi()
 ```
 
 ---
-### Closures
+### What's the output of this function?
 
 ```javascript
 function makeWorker() {
   let name = "Miguel";
 
-  return function() {
-    alert(name);
-  };
+* return function() {
+*   console.log(name);
+* };
 }
 
 let name = "Paul";
@@ -440,10 +459,317 @@ console.log(counter2()); // 0 (independent)
 ```
 
 ---
+### References
+
+- [Javascript.info](http://javascript.info/) - Open source tutorials on javascript and Node.js
+
+---
+layout: false
+class: center, middle
+name: asynchronous-programming
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+## Asynchronous programming
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Asynchronous programming](#asynchronous-programming)]
+
+---
+### Synchronous code
+
+Many operations in javascript are synchronous. 
+
+```javascript
+function getValue1(){
+  return 1
+}
+
+function getValue2(){
+  return 2
+}
+
+const value1 = getValue1();
+const value2 = getValue2();
+console.log(value1 + value2);   // 3
+```
+
+This code is synchronous - `getValue2()` has to wait for `getValue1()` to return before executing.
+
+---
+### Synchronous code
+
+The following code is still synchronous
+
+```javascript
+function getValue1(){
+* while(true);
+}
+
+function getValue2(){
+  return 2
+}
+
+const value1 = getValue1();
+const value2 = getValue2(); 
+console.log(value1 + value2); // Never reached
+```
+
+`getValue2()` has to wait **forever** for `getValue1()` to return before executing. 
+
+---
+### Asynchronous code
+
+.bigger[
+Many actions in javascript are asynchronous. Instead of waiting for a function to return before moving on, JavaScript will keep executing.
+
+Common asynchronous operations are for example I/O operations:
+
+- Reading and writing files (Node.js)
+- Querying data from a database (Node.js)
+- Fetching data from an API (in-browser and Node.js)
+]
+
+---
+### Asynchronous code
+
+Let's take a look at a asynchronous code.
+
+```javascript
+function first(){
+  setTimeout(function() {
+    console.log(1)
+  }, 2000)
+}
+
+function second(){
+  console.log(2)
+}
+
+first();
+second();
+```
+
+This code will produce the following output
+```javascript
+2
+1
+```
+---
+### Why do we need callbacks ?
+
+A function that does something asynchronously should provide a callback argument where we put the function to run after it’s complete.
+
+For example `setTimeout` is available in javascript (browser) and Node.js with the following syntax :
+
+```javascript
+setTimeout(callback, milliseconds)
+```
+
+```javascript
+setTimeout(function() {
+  console.log(“the callback has been invoked”);
+}, 2000);
+```
+**An event will be added to the queue in 2000 ms.** In other words, the function passed as the first argument will be invoked in 2 seconds or more (the thread might be busy when the event is posted...).
+
+
+---
+### Callbacks
+
+```javascript
+// Node.js
+fs.readFile('/etc/passwd', function (err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+```
+
+**An event will be added when the file has been fully read (in a non-blocking way).** When the event is taken out of the queue, the callback function has access to the file content (data).
+
+---
+### Callbacks
+
+```javascript
+// Event listener using JQuery
+$(document).mousemove(function(event){
+  $("span").text(event.pageX + ", " + event.pageY);
+});
+```
+
+**An event will be added to the queue whenever the mouse moves.** In each case, the callback function has access to the event attributes (coordinates, key states, etc.).
+
+```javascript
+// Ajax request using JQuery
+$.get("ajax/test.html", function( data ) {
+  $( ".result" ).html( data );
+  alert( "Load was performed." );
+});
+```
+**An event will be added when the AJAX request has been processed**, i.e. when a response has been received. The callback function has access to the payload.
+
+---
+### Beyond simple callbacks
+
+The principle of passing a callback function when invoking an asynchronous operation is pretty straightforward.
+
+Things get more tricky as soon as you want to coordinate multiple tasks.
+
+---
+### 1st attempt
+
+```javascript
+let milkAvailable = false;
+
+function milkCow() {
+  console.log("Starting to milk cow...");
+  setTimeout(function() {
+    console.log("Milk is available.");
+    milkAvailable = true;
+  }, 2000);
+}
+
+milkCow();
+console.log("Can I drink my milk? (" + milkAvailable + ")");
+```
+---
+### Solution
+
+```javascript
+let milkAvailable = false;
+
+*function milkCow(done) {
+  console.log("Starting to milk cow...");
+  setTimeout(function() {
+    console.log("Milk is available.");
+    milkAvailable = true;
+*   done()
+  }, 2000);
+}
+
+milkCow(function () {
+  console.log("Can I drink my milk? (" + milkAvailable + ")");
+});
+
+```
+
+---
+### Sequence
+
+Ok... but what happens when I have more than 2 tasks that I want to execute in sequence?
+
+```javascript
+function display(value) {
+  console.log("display " + value);
+}
+
+function displaySoon(value) {
+  setTimeout(function timer() {
+    console.log("display soon " + value);
+  }, 2000);
+}
+
+display(1);
+display(2);
+displaySoon(3);
+displaySoon(4);
+displaySoon(5);
+display(6);
+
+// outputs: 1, 2, 6, 3, 4, 5
+```
+[Analyze it with loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gZGlzcGxheSh2YWx1ZSkgewogIGNvbnNvbGUubG9nKCJkaXNwbGF5ICIgKyB2YWx1ZSk7Cn0KCmZ1bmN0aW9uIGRpc3BsYXlTb29uKHZhbHVlKSB7CiAgc2V0VGltZW91dChmdW5jdGlvbiB0aW1lcigpIHsKICAgIGNvbnNvbGUubG9nKCJkaXNwbGF5IHNvb24gIiArIHZhbHVlKTsKICB9LCAyMDAwKTsKfQoKZnVuY3Rpb24gc3RhcnQoKSB7CiAgICBkaXNwbGF5KDEpOwogICAgZGlzcGxheSgyKTsKICAgIGRpc3BsYXlTb29uKDMpOwogICAgZGlzcGxheVNvb24oNCk7CiAgICBkaXNwbGF5U29vbig1KTsKICAgIGRpc3BsYXkoNik7CiAgICBkaXNwbGF5KDcpOwogICAgZGlzcGxheSg4KTsKfQoKc3RhcnQoKTs%3D!!!)
+
+---
+### Sequence
+
+```javascript
+function display(value) {/* ... */}
+
+*function displaySoon(value, callback) {
+  setTimeout(function timer() {
+    console.log("display soon " + value);
+*    callback()
+  }, 2000);
+}
+
+display(1);
+display(2);
+displaySoon(3, function() {
+  displaySoon(4, function() {
+    displaySoon(5, function() {
+      display(6);
+    });
+  });
+});
+```
+
+[Analyze it with loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gZGlzcGxheSh2YWx1ZSkgewogIGNvbnNvbGUubG9nKCJkaXNwbGF5ICIgKyB2YWx1ZSk7Cn0KCmZ1bmN0aW9uIGRpc3BsYXlTb29uKHZhbHVlLCBjYWxsYmFjaykgewogIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICBjb25zb2xlLmxvZygiZGlzcGxheSBzb29uICIgKyB2YWx1ZSk7CiAgICAgY2FsbGJhY2soKQogIH0sIDIwMDApOwp9CgpmdW5jdGlvbiBzdGFydCgpIHsKICAgIGRpc3BsYXkoMSk7CiAgICBkaXNwbGF5KDIpOwogICAgZGlzcGxheVNvb24oMywgZnVuY3Rpb24oKSB7CiAgICAgIGRpc3BsYXlTb29uKDQsIGZ1bmN0aW9uKCkgewogICAgICAgIGRpc3BsYXlTb29uKDUsIGZ1bmN0aW9uKCkgewogICAgICAgICAgZGlzcGxheSg2KTsKICAgICAgICB9KTsKICAgICAgfSk7CiAgICB9KTsKfQoKc3RhcnQoKTsKY29uc29sZS5sb2coJ2ZpbmlzaGVkID8nKTs%3D!!!)
+
+---
+### Parallel
+
+Now, let’s imagine that we have 3 asynchronous tasks. We want to invoke them in parallel and wait until all of them complete.
+
+Typical use case: you want to send several AJAX requests (to get different data models) and update your DOM once you have received all responses.
+
+```javascript
+function fetchAll(done) {
+  fetchData('/api/users/user1');
+  fetchData('/api/users/user2');
+  fetchData('/api/users/user3');
+  done();
+}
+```
+
+--
+
+**Double fail: not only do I invoke `done()` too early, but also I don’t have any result to send back...**
+
+---
+### Parallel
+
+```javascript
+function fetchAll(done) {
+  const results = [];
+  let numberOfPendingTasks = 3;
+
+  function reportResults(result) {
+    results.push(result);
+    numberOfPendingTasks -= 1;
+    if (numberOfPendingTasks === 0) {
+      done(results);
+    }
+  }
+
+  fetchData('/api/users/user1', reportResults);
+  fetchData('/api/users/user2', reportResults);
+  fetchData('/api/users/user3', reportResults);
+}
+```
+
+[![Edit Asynchronous tasks - Parallel](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/p2pw7pw73m)
+
+---
+### Webcasts
+
+- [Async with callbacks (1) : overview](https://youtu.be/EFTSOLhnlbE)
+- [Async with callbacks (2): create a sync version first](https://youtu.be/WKE3by3k2lY)
+- [Async with callbacks (3): refactor the class and introduce a private function](https://youtu.be/jLdboiiD5u0)
+- [Async with callbacks (4): refactor the class: async signature and modification of the test suite](https://youtu.be/pU-HTLQ63AA)
+- [Async with callbacks (5): fixing the problem and calling done() when everything is done](https://youtu.be/lcqqgnyPWxc)
+- [Async with callbacks (6): write a function to fetch all pages](https://youtu.be/6b_5bdIj5Bo)
+
+---
+### References
+
+- [Philip Roberts: What the heck is the event loop anyway? | JSConf EU](https://youtu.be/8aGhZQkoFbQ)
+
+---
 layout: false
 class: center, middle
 name: automated-testing
-<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
 ## Automated testing
 
 ---
@@ -576,6 +902,12 @@ Now you can just type the following command to run tests with the configuration 
 $ npm test
 ```
 
-
 ---
-### References
+### Webcasts
+
+- [TDD with mocha and chai (1): overview](https://youtu.be/Pngkmih-3SE)
+- [TDD with mocha and chai (2): install npm modules](https://youtu.be/xAIrgcN3l0g)
+- [TDD with mocha and chai (3): implement test module](https://youtu.be/_9XZV35SEG0)
+- [TDD with mocha and chai (4): implement module](https://youtu.be/DGbdKiY85Yw)
+- [TDD with mocha and chai (5): refactor to es6 and validate](https://youtu.be/Dlw3Y6HodqA)
+- [TDD with mocha and chai (6): one more thing...](https://www.youtube.com/watch?v=YO877449Y0c&list=PLfKkysTy70QZUPYjLkkYcwqvVph4q9cKZ&index=14)

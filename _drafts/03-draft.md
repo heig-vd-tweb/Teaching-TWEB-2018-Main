@@ -1,13 +1,3 @@
-## Javascript foundations > language basics
-
-- Variables
-- Functions
-- Closures
-- Semi-colons
-- Javascript Core API
-- Node.js Core API
-
-
 ---
 
 ## Javascript compared to Java
@@ -18,13 +8,9 @@
 | Variable data types are not declared (dynamic typing, loosely typed). | Variable data types must be declared (static typing, strongly typed). |
 
 ---
-## Javascript foundations > javascript async
+## Javascript foundations
 
 > In node everything runs in parallel, except your code
-
-callback functions
-event loop
-
 
 ---
 ## Github analytics > Phase 1
@@ -42,12 +28,3 @@ event loop
 
 ???
 - @beginners: split client / server projects to avoid confusion
-
----
-## References
-- https://medium.com/reloading/javascript-start-up-performance-69200f43b201
-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction
-- https://hacks.mozilla.org/2017/02/a-cartoon-intro-to-webassembly/
-- https://developer.telerik.com/featured/a-guide-to-javascript-engines-for-idiots/
-
----
