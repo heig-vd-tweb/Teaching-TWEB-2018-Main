@@ -14,85 +14,568 @@ class: middle, left
 .subheading[Use testing to learn async javascript]
 
 ---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
 ## Daily menu
 
-- Automated testing
+.bigger[
+- Introduction to Javascript
 - Javascript foundations
-- Github analytics
-- Review lab 1
+- Async programming
+- Expand our development environment
+  - Add a testing framework
+  - Make it a learning environment
+]
 
 ---
+class: center, middle
+name: introduction-to-javascript
+## Introduction to JavaScript
+---
+
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Introduction to Javascript](#introduction-to-javascript)]
+
+---
+### Facts
+
+.bigger[
+- Javascript was written in only **10 days**
+- Some people thinks it's a **mess** when others thinks that it's the **best** language ever
+- A lot of data analysis platforms prove that it is the **most popular** technology in the engineering world
+]
+
+---
+### What makes javascript so popular?
+
+.bigger[
+- **Simplicity**: Simple to learn and implement
+- **Productivity**: Fast deployment, test and debug without *compilation* process
+- **Platform Independence**: Executes on any device where there exists a special program called the JavaScript engine - Browsers, servers, desktop/mobile apps.
+- **Speed**: Thanks to existing javascript engines, its execution is really, really fast !
+]
+
+---
+### Javascript performance
+.smaller[
+Javascript wasn’t designed to be fast and for the first decade, it wasn’t fast - until the introduction of  **just-in-time compilers** (JIT) in **javascript engines**. Execution of JS was 10x faster.
+]
+
+<img src="{{site.baseurl}}/images/02-javascript-peformance.png" height="450px" width="auto" alt="javascript performance">
+
+---
+### What is a javascript engine?
+
+A javascript engine, sometimes called "JavaScript virtual machine", take the JavaScript code that a developer writes and convert it to fast, optimized code that can be interpreted by a browser or even embedded into an application.
+
+Each JavaScript engine implements a version of ECMAScript, of which JavaScript is a dialect
+
+- <a href="https://en.wikipedia.org/wiki/V8_(JavaScript_engine)">V8</a> – in Google Chrome and Opera.
+- [SpiderMonkey](https://en.wikipedia.org/wiki/SpiderMonkey) - in Mozilla Firefox.
+- [JavaScriptCore](https://en.wikipedia.org/wiki/WebKit#JavaScriptCore) - in Safari
+- <a href="https://en.wikipedia.org/wiki/Chakra_(JavaScript_engine)">Chakra</a> - in Microsoft Edge
+
+> The engine used in Node.js is V8
+
+---
+### How V8 works?
+
+<img src="{{site.baseurl}}/images/02-how-v8-works.png" alt="How V8 works" height="auto" width="95%">
+
+---
+### How JavaScript is run in the browser?
+
+In programming, there are generally two ways of translating to machine language. You can use an interpreter or a compiler.
+
+**Interpreter**  
+The translation happens line-by-line, on the fly. Quick to get up and running. But for a code in a loop, the same translation happens over and over.
+
+**Compiler**  
+The translation happens ahead of time. Takes necessary time to optimize the code - the code runs faster. But takes a little bit more time to start up.
+
+---
+### Just-in-time compilers
+
+Mixing different types of compilers to get rid of the interpreter’s inefficiency.
+
+- **Monitor** (profiler) - Identifies hot functions as they execute and what types are used.
+- **Baseline compiler** - A fast compiler that produces unoptimized code
+- **Optimizing compiler** - A slower compiler that produces fast, optimized code.
+
+---
+### What can in-browser JavaScript do?
+
+- Add new HTML to the page, change the existing content, modify styles.
+- React to user actions, run on mouse clicks, pointer movements, key presses.
+- Send requests over the network to remote servers, download and upload files 
+- Get and set cookies, ask questions to the visitor, show messages.
+- Remember the data on the client-side (“local storage”).
+
+---
+### What CAN’T in-browser JavaScript do?
+
+JavaScript’s abilities in the browser are limited for the sake of the user’s safety.
+
+- read/write arbitrary files on the hard disk, copy them or execute programs.
+- There are ways to interact with camera/microphone and other devices, but they require a user’s explicit permission
+- Different tabs/windows generally do not know about each other.
+- Communicate with a server from a different domain - unless an explicit agreement (expressed in HTTP headers) is given by the server
+
+---
+### In-browser javascript limitations
+
+<img src="{{site.baseurl}}/images/02-in-browser-js-limitations.png" height="450px" width="auto">
+
+---
+layout: false
+class: center, middle
+name: javascript-foundations
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+## Javascript foundations
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Javascript foundations](#javascript-foundations)]
+
+---
+### Variables
+
+.bigger[
+We can declare variables to store data. That can be done using `var`, `let` or `const`.
+
+- `let` – is a modern variable declaration. The code must be in strict mode to use let in Chrome (V8).
+- `var` – is an old-school variable declaration with subtle differences from `let`.
+- `const` – is like `let`, but the value of the variable can’t be changed.
+]
+
+---
+### “var” has no block scope
+
+`var` variables are either function-wide or global, they are visible through blocks
+
+```javascript
+// first-script.js
+if (true) {
+  var myVar = 'hello'; // use "var" instead of "let"
+}
+console.log(myVar); // hello, the variable lives after if
+```
+
+But `var` ignores code blocks, so we’ve got a global test. Imagine an other script that runs on the same page
+
+```javascript
+// second-script.js
+console.log(window.myVar); // hello
+console.log(myVar); // hello
+```
+
+`let` has block scope. If we used `let`, then `myVar` would be only visible in its current block (inside the `if`).
+
+---
+### Types
+
+A variable in JavaScript can contain any data. A variable can at one moment be a string and later receive a numeric value
+
+Programming languages that allow such things are called “dynamically typed”, meaning that there are data types, but variables are not bound to any of them.
+
+There are 7 basic types in JavaScript.
+
+- `number` for numbers of any kind: integer or floating-point.
+- `string` for strings. A string may have one or more characters, there’s no separate single-character type.
+- `boolean` for true/false.
+- `null` for unknown values
+- `undefined` for unassigned values
+- `object` for more complex data structures.
+- `symbol` for unique identifiers.
+
+---
+### Types
+
+The typeof operator returns the type of the argument. The call to `typeof` returns a string with the type name:
+
+```javascript
+typeof undefined    // "undefined"
+typeof 0            // "number"
+typeof true         // "boolean"
+typeof "foo"        // "string"
+typeof Symbol("id") // "symbol"
+```
+
+```javascript
+typeof alert        // function 🤔
+typeof [1, 2]       // "object" 😥
+*typeof null         // "object" 😱
+```
+
+Remember, Javascript was written in 10 days. `typeof null === 'object'` is a bug that stands since the beginning of JavaScript. [Read More](http://2ality.com/2013/10/typeof-null.html).
+
+---
+### Stranger things
+
+```javascript
+Boolean(0)    // false
+Boolean("0")  // true
+0 == "0"      // true!
+```
+
+--
+<iframe src="https://giphy.com/embed/xUNd9X5AicQtYJThkc" width="480" height="360" frameBorder="0" allowFullScreen></iframe>
+
+---
+### Even more strange
+
+<img src="{{site.baseurl}}/images/02-this-sub-and-javascript.jpg" alt="This sub and javascript" height="530px" width="auto" />
+
+---
+### Comparison
+
+When comparing values of different types, they are converted to numbers.
+
+```javascript
+'2' > 1 // true, string '2' becomes a number 2
+'01' == 1 // true, string '01' becomes a number 1
+```
+
+For boolean values, `true` becomes `1` and `false` becomes `0`, that’s why:
+```javascript
+true == 1     // true
+false == 0    // true
+```
+
+Finally, that's why:
+
+```javascript
+true == '1'   // true
+```
+
+In the above example, `true` becomes `1` and `'1'` becomes `1`
+
+---
+### Comparison
+
+A strict equality operator `===` and `!==` checks the equality without type conversion.
+
+If `a` and `b` are of different types, then `a === b` immediately returns false without an attempt to convert them.
+
+```javascript
+true === 1          // false
+null === undefined  // false
+```
+
+---
+### Comparison
+
+The previous examples may be confusing. To avoid confusions and making mistakes, here is what you should do:
+
+- Follow best practices - [Comparison Operators & Equality](https://github.com/airbnb/javascript#comparison-operators--equality) from Airbnb javascript style guide
+- Write automated tests
+- Understand how it works in details - [Truth Equality and JavaScript](https://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/#more-2108)
+
+---
+### Functions
+
+A function can be created at one moment, then copied to another variable or passed as an argument to another function and called from a totally different place later.
+
+```javascript
+const sayHi = () => { alert('Heu... Hi!'); };
+
+function sayHiSoon() {
+  setTimeout(sayHi, 2000);
+}
+
+sayHiSoon() // Heu.. Hi!, in 2 sec
+```
+
+---
+### Functions
+
+Function arguments are always passed by value
+
+```javascript
+function doSomething(value) {
+  value = "modified";
+}
+
+let name = "original";
+
+doSomething(name);
+console.log(name); // original
+```
+
+Even if it's not recommend to do this, changing the value of the variable never changes the underlying primitive
+
+--
+
+> Never reassign parameters. eslint: [`no-param-reassign`](https://github.com/airbnb/javascript#functions--mutate-params)
+Why? Reassigning parameters can lead to unexpected behavior, especially when accessing the arguments object. It can also cause optimization issues, especially in V8. [Read more...](https://spin.atomicobject.com/2011/04/10/javascript-don-t-reassign-your-function-arguments/)
+
+---
+### Functions
+However, when a variable refers to an object which includes array, the value is the reference/address to the object.
+
+```javascript
+function doSomething(obj) {
+  obj.age = 26;
+}
+
+let person = { age : 36 }
+
+doSomething(person);
+console.log(person.age); // 26
+```
+
+Changing the argument inside the function affect the variable passed from outside the function
+
+> Never reassign parameters. eslint: [`no-param-reassign`](https://github.com/airbnb/javascript#functions--mutate-params) 
+Why? Manipulating objects passed in as parameters can cause unwanted variable side effects in the original caller.
+
+---
+### Local variables
+
+A variable declared inside a function is only visible inside that function.
+
+```javascript
+function showMessage() {
+  let message = "Hello, I'm JavaScript!"; // local variable
+  console.log(message);
+}
+
+showMessage(); // Hello, I'm JavaScript!
+
+console.log(message); // ReferenceError: message is not defined
+```
+
+---
+### Outer variables
+
+A function can access an outer variable as well, for example:
+```javascript
+let userName = 'paul';
+
+function sayHi() {
+  let message = `Hi, ${userName}`;
+  console.log(message);
+}
+
+sayHi(); // Hi, paul
+```
+
+---
+### Outer variables
+
+If a same-named variable is declared inside the function then it shadows the outer one. 
+
+```javascript
+let userName = 'paul';
+
+function sayHi() {
+* let userName = 'john'
+  let message = `Hi, ${userName}`;
+  console.log(message);
+}
+
+sayHi(); // Hi, john
+console.log(userName) // paul, not modified by the function
+```
+
+---
+### Closures
+
+```javascript
+let name = "Paul";
+
+function sayHi() {
+  alert("Hi, " + name);
+}
+
+name = "Miguel";
+
+sayHi()
+```
+
+---
+### Closures
+
+```javascript
+function makeWorker() {
+  let name = "Miguel";
+
+  return function() {
+    alert(name);
+  };
+}
+
+let name = "Paul";
+
+// create a function
+let work = makeWorker();
+
+// call it
+work();
+```
+
+---
+### Closures
+
+A closure is a function that remembers its outer variables and can access them
+
+```javascript
+function makeCounter() {
+  let count = 0;
+* return function() {
+*   return count++;
+* };
+}
+
+let counter1 = makeCounter();
+let counter2 = makeCounter();
+
+console.log(counter1()); // 0
+console.log(counter1()); // 1
+console.log(counter2()); // 0 (independent)
+```
+
+---
+layout: false
+class: center, middle
+name: automated-testing
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
 ## Automated testing
 
-Why should I write automated tests
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Automated testing](#automated-testing)]
 
 ---
-## Automated testing > Testing frameworks
 
-Talk about existing testing frameworks.
-Talk about browser testing
+### Why should I write automated tests?
 
----
-## Automated testing > Mocha & chai
-
-Introduce mocha and chai
-
----
-## Javascript foundations > history
-https://javascript.info/intro
-
-Javascript
-- Why javascript
-- Engines and how V8 and JIT compilers works
-- What can in-browser javascript do ?
-- What can't in browser javascript do ?
-
-Node.js
-- Why nodeJS
-- What can Node.js do
-- What can't Node.js do
-
-Quizz:
-- Javascript is ... interpreted, compiled or both
-- Node.js is ... a programming language, a web server, or a framework.
-
----
-## Javascript foundations > language basics
-
-- Variables
-- Functions
-- Closures
-- Semi-colons
-- Javascript Core API
-- Node.js Core API
-
-
----
-## Javascript foundations > javascript async
-
-> In node everything runs in parallel, except your code
-
-callback functions
-event loop
-
-
----
-## Github analytics > Phase 1
-
-- Form groups of 2
-- Agree on the data to be extracted from GitHub
-- Create a mockup of your app
-- Setup client-side project
-  - (Optional) start with a template of choice [creative tim](https://demos.creative-tim.com/)
-  - (Optional) add a charting library [Popular charting libraries](https://bestofjs.org/tags/chart)
-  - (Optional) install a framework of your choice such as [Vue.js](https://vuejs.org/), [React](https://reactjs.org/), [Angular](https://angular.io/)
-- Setup server-side project
-  - add a linter
-  - add a testing framework
+.bigger[
+- Automated testing is important for **quality** and continuous delivery
+- Writing tests is also an approach to **design** and **document** software (TDD)
+]
 
 ???
-- @beginners: split client / server projects to avoid confusion
+- TDD: Use the program even before it exists
+---
+### Solution
+
+.bigger[
+- Select a testing framework: [mocha.js](https://mochajs.org/)
+- Select an assertion library: [chai.js](https://www.chaijs.com/)
+- Write tests to get familiar Javascript
+]
 
 ---
-## Review lab 1
+### Install Mocha
 
+First you need a test runner. Mocha is a popular testing framework that runs your tests serially and show results in your terminal.
+
+Create a javascript project, with a `test` folder and a `sample-test.js` file :
+
+```sh
+my-project
+├── test
+│   └──sample-test.js
+└── package.json
+```
+
+Then run the following command to install mocha locally as a development dependency :
+
+```sh
+$ npm install --save-dev mocha
+```
+
+---
+### Run a simple test
+
+Write a simple test suite, then run `./node_modules/.bin/mocha`
+
+```javascript
+// test/sample-test.js
+const assert = require('assert');
+
+describe('String', function () {
+  it('should replace some characters', function () {
+    const name = 'paulnta'
+      .replace('au', 'o')
+      .replace('n', 'en');
+    assert.equal(name, 'polenta');
+  });
+
+  it('will fail', function () {
+    assert.equal('1' + '1', '2');
+    // AssertionError [ERR_ASSERTION]: '11' == '2'
+  });
+});
+```
+
+By default mocha will execute any `.js` files inside `test` folder and report results in your terminal.
+
+---
+### Install Chai
+
+In the previous example we're using Node.js' built-in [assert](https://nodejs.org/api/assert.html) module. - But Mocha allows you to use any assertion library you wish.
+
+In practice we often add an another assertion library such as [Chai](https://www.chaijs.com/) to get more powerful features :
+
+```javascript
+expect(name).to.be.a('string');
+expect(polenta).to.have.a.property('color')
+  .with.lengthOf(6);
+```
+
+Install chai via npm as follows :
+
+```sh
+$ npm install --save-dev chai
+```
+
+---
+### Install Chai
+
+The previous example could be re-written as follows using `expect` from `chai`
+
+```diff
++const { expect } = require('chai');
+
+describe('String', function () {
+  it('should transform name', function () {
+    const name = 'paulnta'.replace('au', 'o').replace('n', 'en');
++   expect(name).to.equal('polenta');
+  });
+
+  it('will fail', function () {
++   expect('1' + '1').to.equal('2');
+  });
+});
+```
+
+Chai allows you to use different [assertion styles](https://www.chaijs.com/api/) and [plugins](https://www.chaijs.com/plugins/). Use what makes the most sense for your project.
+
+---
+### Running tests with npm
+
+To make your tests easily runnable, add  a `test` command to the `script` field of your `package.json`
+
+```javascript
+// package.json
+"scripts": {
+  "test": "mocha test/**/*.js"
+},
+```
+
+Now you can just type the following command to run tests with the configuration you specified.
+
+```sh
+$ npm test
+```
+
+
+---
+### References
