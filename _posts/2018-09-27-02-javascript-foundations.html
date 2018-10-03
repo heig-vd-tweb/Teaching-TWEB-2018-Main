@@ -613,7 +613,18 @@ $.get("ajax/test.html", function( data ) {
 
 The principle of passing a callback function when invoking an asynchronous operation is pretty straightforward.
 
-Things get more tricky as soon as you want to coordinate multiple tasks.
+Things get more tricky as soon as you want to **coordinate multiple tasks**.
+
+<div class="row">
+  <figure>
+    <img src="{{site.baseurl}}/images/02-milking-icon.svg" height="90px" width="auto">
+    <figcaption>Do this first ...</figcaption>
+  </figure>
+  <figure>
+    <img src="{{site.baseurl}}/images/02-drinking-icon.svg" height="90px" width="auto">
+    <figcaption>...when done, do this</figcaption>
+  </figure>
+<div>
 
 ---
 ### 1st attempt
