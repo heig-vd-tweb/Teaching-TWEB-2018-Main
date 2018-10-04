@@ -20,6 +20,14 @@ layout: true
 ---
 ## Daily menu
 
+.bigger[
+- Introducing Javascript promises
+- Practice with promises in a real world project
+- Learn how to structure client-side and server-side projects
+- Deal with browser compatibilities
+- Deployment - Heroku and Github Pages
+]
+
 ---
 class: middle, center
 name: async-is-hard
@@ -35,9 +43,9 @@ layout: true
 ## Forces
 
 .bigger[
-- Writing async code is not an option with Javascript.
-- It is also becoming increasingly important in other languages.
-- Writing code with callbacks quickly leads to problems: deeply nested “pyramids”, unreadable code, tricky bugs...
+- Writing async code is **not an option** with Javascript.
+- It is also becoming increasingly **important in other languages**.
+- Writing code with **callbacks quickly leads to problems**: deeply nested “pyramids”, unreadable code, tricky bugs...
 ]
 
 ---
@@ -123,7 +131,7 @@ layout: true
 A `promise` is an object representing the eventual completion or failure of an
 asynchronous operation, and its resulting value.
 
-Essentially, a promise is an object you attach callbacks to...
+Essentially, a promise is an object you **attach callbacks** to...
 
 ```javascript
 let promise = fetchUser('paulnta');
@@ -133,7 +141,7 @@ promise.then(function(user) {
 });
 ```
 
-...instead of passing callbacks into a function.
+...instead of **passing callbacks** into a function.
 
 ```javascript
 // Passing a callback
@@ -145,13 +153,13 @@ fetchUser('paulnta', function(error, user) {
 ---
 ## Creating promises
 
-The constructor syntax for a promise object is:
+The **constructor** syntax for a promise object is:
 
 ```javascript
 let promise = new Promise(function(resolve, reject) {
   setTimeout(() => {
-    resolve('Ok, I am done working!')
-  }, 1000)
+    resolve('Ok, I am done working!');
+  }, 1000);
 });
 ```
 
@@ -181,9 +189,9 @@ Promises have a single `result` property.
 ```javascript
 let promise = new Promise(function(resolve, reject) {
   if (typeof ([] + []) === "string") {
-    reject(new Error('Javascript sucks, but I like it!'))
+    reject(new Error('Javascript sucks, but I like it!'));
   } else {
-    resolve('Thank you!')
+    resolve('Thank you!');
   }
 });
 ```
@@ -215,7 +223,7 @@ The second argument of `.then` is a function that:
 ---
 ## Ok I have a promise now what ?
 
-If you’re interested only in successful completions, then you can provide only one function argument to `.then`
+If you’re interested only in **successful** completions, then you can provide only one function argument to `.then`
 
 ```javascript
 let promise = new Promise(resolve => {
@@ -228,7 +236,7 @@ promise.then(console.log); // logs "done!" after 1 second
 ---
 ## Ok I have a promise now what ?
 
-If you're interested only in errors, then you can use `null` as the first argument: `.then(null, errorHandler)`. Or you can use `.catch(errorHandler)`, which is exactly the same:
+If you're interested only in **errors**, then you can use `null` as the first argument: `.then(null, errorHandler)`. Or you can use `.catch(errorHandler)`, which is exactly the same:
 
 ```javascript
 let promise = new Promise((resolve, reject) => {
@@ -272,7 +280,7 @@ new Promise((resolve, reject) => {
 })
   .then((result) => result * 2)
   .then((result) => result * 2)
-  .then(console.log)
+  .then(console.log);
   // logs 1, in 1 second
 ```
 
@@ -308,25 +316,25 @@ This code tells a story
     .then(prepareCheese)
     .then(sellCheese)
     .then(money => {
-      console.log('Youpi! I have my money.')
-    })
+      console.log('Youpi! I have my money.');
+    });
 ```
 
 ---
 ## Real world example
 
-We'll use the [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) method to load the information about a user from the Github API.
+We'll use the [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) method to load the information about a user from the Github API.
 
 Fetch performs a network request and returns a promise. The promise resolves with a response object when the remote server responds with headers, but **before the full response is downloaded**.
 
 ```javascript
-let promise = fetch(`https://api.github.com/users/paulnta`)
+let promise = fetch(`https://api.github.com/users/paulnta`);
 ```
 
 To read the full response, we should call a method `response.json()`
 
 ```javascript
-promise.then(response => response.json())
+promise.then(response => response.json());
 ```
 
 ---
@@ -350,6 +358,7 @@ getUserAvatar('paulnta')
 ```
 
 **What if `getUserAvatar()` fails ?**
+> The promise returned by fetch rejects when it’s impossible to make a request. 404 or even 500 responses are considered valid
 
 ---
 ## Real world example
@@ -404,6 +413,14 @@ Promise.all(requests)
 
 If any of the promises is rejected, `Promise.all` immediately rejects with that error.
 
+[![Edit Promises chaining](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1013l5rxq7)
+
+---
+## References
+
+- [Using Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+- [Promises tutorial](http://javascript.info/promise-basics)
+
 ---
 layout: true
 <img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
@@ -431,7 +448,7 @@ The goals are:
   - Promises and fetch API
   - Javascript DOM manipulation
 - Introduce **new concepts**
-  - Express - a Node.js framework to create server side applications
+  - [Express](http://expressjs.com/) - a Node.js framework to create server side applications
   - Build pipelines and deployment
 
 ---
@@ -459,7 +476,7 @@ name: Writing next generation JavaScript.
 ## Javascript flavours
 
 .bigger[
-- We have seen that there are different generations of Javascript (es5, es6, etc.).
+- We have seen that there are different generations of Javascript (ES5, ES6, etc.).
 - You may also have heard about other languages “related” to Javascript: Typescript, CoffeeScript or Flow
 - As a developer, you may want to use the last features of the language.
 - On the server side, you have control on the runtime environment. On the client side, you don’t.
@@ -470,9 +487,12 @@ name: Writing next generation JavaScript.
 
 .bigger[
 - There are tools that transform (transpile) different dialects of Javascript in code that is understood by older engines.
-- Today, the most popular is Babel.js.
+- Today, the most popular is [Babel.js](https://babeljs.io/).
 - It gives you a command line tool, which takes “modern” Javascript files as input and generates “universal” Javascript as output.
 ]
+
+[Try Babel REPL](https://babeljs.io/repl#?babili=false&browsers=safari%20%3E%209&build=&builtIns=false&spec=false&loose=false&code_lz=DYUwLgBArgziBOMIF4IG0DkAHAhlYAdmDhgDQQYgAm8AlhgLoDcAULAkqmgHS_uLkMAdxwwcVWgHN6zFiwDGAewIxIaCLnzle3RWAAWHCAxTQ4iJkA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env&prettier=false&targets=&version=6.26.0&envVersion=1.6.2)
+
 
 ---
 ## Back to basics
@@ -587,7 +607,7 @@ But browsers haven't implemented modules yet. So you'll need an other tool `brow
 ---
 ## Require modules
 
-Browsers don't have the `require` method defined, but Node.js does. With Browserify you can write code that uses `require` in the same way that you would use it in Node.
+**Browsers don't** have the `require` method defined, but **Node.js does**. With Browserify you can write code that uses `require` in the same way that you would use it in Node.
 
 Browserify can work side by side with babel (through `babelify`). It also has plugins such as `watchify` to watch for changes in your code and automatically re-build your app.
 
@@ -645,9 +665,9 @@ layout: true
 ## How can we deploy our services “to the cloud” ?
 
 .bigger[
-- Our app consists of multiple components (services): front-end assets, back-end API, crawler.
+- Our app consists of multiple components (services): **front-end** assets, **back-end** API, **crawler**.
 - We want to make them publicly available, so we need to “deploy” them somewhere.
-- There are many ways to do that, how do we pick one? In our particular case, money and ease of use are 2 constraints.
+- There are many ways to do that, how do we pick one? In our particular case, **money** and **ease of use** are 2 constraints.
 ]
 
 ---
@@ -655,16 +675,16 @@ layout: true
 
 .bigger[
 - We can use a combination of “providers” to deploy our different components.
-- Serving the client-side assets is very easy with GitHub Pages.
-- For the back-end API and the crawler, Heroku is a PaaS provider that we can use for free.
+- Serving the client-side assets is very easy with **GitHub Pages**.
+- For the back-end API and the crawler, **Heroku** is a PaaS provider that we can use for free.
 ]
 
 ---
 ## What is PaaS
 
 .bigger[
-- PaaS stands for Platform as a Service
-- It is one type of “cloud provider”, which allows you to deploy applications (you don’t worry about the OS, the DB, etc.)
+- PaaS stands for **Platform as a Service**
+- It is one type of “cloud provider”, which allows you to deploy applications - **you don’t worry about the OS, the DB, etc.**
 - Other types of “cloud providers” include SaaS (e.g. Google Docs) and IaaS (e.g. Amazon Web Services EC2)
 ]
 
