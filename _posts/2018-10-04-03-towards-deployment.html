@@ -21,6 +21,7 @@ layout: true
 ## Daily menu
 
 ---
+class: middle, center
 name: async-is-hard
 ## Writing async code is hard
 .bigger[Even if it is easy to understand the notion of callback, it is difficult to orchestrate multiple async operations]
@@ -403,3 +404,300 @@ Promise.all(requests)
 
 If any of the promises is rejected, `Promise.all` immediately rejects with that error.
 
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, center
+name: write-code 
+## Let's write some code
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Let's write some code](#write-code)]
+
+---
+## Github analytics .badge[light]
+
+We'll create a really simple Github analytics app. Our app will find users favorite languages based on their public repositories.
+
+The goals are:
+
+- Put into practice **everything we've learned** so far
+  - HTML, CSS, Javascript, Node.js, npm, eslint, mocha, etc..
+- Practice with **new concepts**
+  - Promises and fetch API
+  - Javascript DOM manipulation
+- Introduce **new concepts**
+  - Express - a Node.js framework to create server side applications
+  - Build pipelines and deployment
+
+---
+layout: true
+class: middle, center
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg">
+
+---
+name: next-gen-js
+## Writing next generation Javascript
+.bigger[How do I make sure that my “dialect” of Javascript will work on all browsers?]
+
+```javascript
+const range = [...Array(5).keys()].map(i => i + 10)
+// [10, 11, 12, 13, 14]
+```
+
+---
+layout: true
+name: Writing next generation JavaScript.
+<img class="logo" src="{{site.baseurl}}/images/logo.svg">
+.breadcrumbs[[Writing next generation JavaScript](#next-gen-js)]
+
+---
+## Javascript flavours
+
+.bigger[
+- We have seen that there are different generations of Javascript (es5, es6, etc.).
+- You may also have heard about other languages “related” to Javascript: Typescript, CoffeeScript or Flow
+- As a developer, you may want to use the last features of the language.
+- On the server side, you have control on the runtime environment. On the client side, you don’t.
+]
+
+---
+## Solution
+
+.bigger[
+- There are tools that transform (transpile) different dialects of Javascript in code that is understood by older engines.
+- Today, the most popular is Babel.js.
+- It gives you a command line tool, which takes “modern” Javascript files as input and generates “universal” Javascript as output.
+]
+
+---
+## Back to basics
+
+- Browsers use different engines (V8, Chakra, SpiderMonkey, JavascriptCore etc..) to translate javascript to machine code.
+- Engines are an implementation of the Javascript Language
+- Javascript is a general purpose scripting language that conforms to the ECMAScript specification
+- ECMAScript is a specification for what a scripting language could look like
+- Releasing a new edition of ECMAScript does not mean that all JavaScript engines in existence suddenly have those new features
+- Engines incorporate new ECMAScript features [incrementally](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_2015_support_in_Mozilla)
+- ECMAScript 5 (ES5) is [widely supported](http://kangax.github.io/compat-table/es5/)
+- Current browsers [dont support all](http://kangax.github.io/compat-table/es6/) the ECMAScript 6 (ES6, ES2015)
+
+---
+## What should I do ?
+
+- Define your supported environments. Which browsers (or Node.js versions) your app needs to support
+- Write code in the latest version of JavaScript
+- If needed, use babel to compile your code down to supported environments
+
+---
+## How babel works ?
+
+They are two tasks babel performs when compiling your code we need to understand
+
+**Transforming** - This tasks transforms the **syntax** of your code. For example Arrow functions `() => {}` needs to be transformed into standard `function(){}` to run on IE 11.
+
+
+**polyfilling** - For this task, babel injects polyfills into your code. A polyfill is a code that implement a missing **feature** on a browser. For example `Promise` doesn't exist in IE 11 or Safari 10 and this feature needs to be simulated to work on those browsers.
+
+---
+## Babel
+
+There are quite a few tools in the Babel toolchain. Thoses tools (modules) are published as separate npm packages scoped under `@babel`.
+
+- `@babel/core` - Where Babel's core functionality resides. This module is required to use babel.
+- `@babel/cli` - Allows you to use babel from the terminal.
+- `@babel/polyfill` - contains necessary code to emulate a full ES2015+ environment. *Promise*, *Fetch*, *Array.prototype.includes*, etc...
+- `@babel/plugin-transform-xxxx` - Transformations come in the form of plugins, which are small JavaScript programs that instruct Babel on how to transform your code syntax.
+- `@babel/preset-xxx` - A preset is just a pre-determined set of plugins.
+
+---
+## Set up Babel
+
+To setup babel for command line usage, start by installing dependencies locally
+
+```sh
+$ npm install --save-dev @babel/core @babel/cli @babel/preset-env
+$ npm install --save @babel/polyfill
+```
+
+Then add a `.babelrc.js` configuration file to specify supported environment. We use a preset called `preset-env` that automatically choose what plugins and polyfills to include based on our supported environment.
+
+```javascript
+// .babelrc.js
+module.exports = {
+  presets: [
+    ["@babel/env", {
+      // target minimum browser versions
+      targets: "> 0.25%, not dead",
+      // require needed polyfills
+      useBuiltIns: "usage",
+    }]
+  ]
+}
+```
+
+---
+name: babel-config
+## Run babel
+
+To compile your code, use the `babel` command line interface. Here we pass an input directory `js` and an output directory `dist` to store the result of the compilation.
+
+```sh
+$ npx babel js --out-dir dist
+```
+
+You can also include this command in your `package.json` file as an npm script
+```js
+// package.json
+"scripts": {
+  "build": "npx babel js --out-dir dist",
+  ...
+},
+```
+
+So know you can run `npm run build` to compile your scripts
+
+> Don't forget to update references any to your scripts in your index.html.
+
+---
+## Require modules
+
+Until now, in client-side project, we used script tags to load javascript code. 
+
+For babel to work as expected with the [previous configuration](#babel-config) and to structure your in modules like in Node.js environment, you need a way to `require()` and `exports` modules.
+
+For example you'd like to use `chart.js` npm modules in your app.
+
+```sh
+$ npm install --save chart.js
+```
+
+```js
+// js/app.js
+const Chart = require('chart.js');
+const myChart = new Chart(ctx, {...});
+```
+
+But browsers haven't implemented modules yet. So you'll need an other tool `browserify`.
+
+---
+## Require modules
+
+Browsers don't have the `require` method defined, but Node.js does. With Browserify you can write code that uses `require` in the same way that you would use it in Node.
+
+Browserify can work side by side with babel (through `babelify`). It also has plugins such as `watchify` to watch for changes in your code and automatically re-build your app.
+
+```sh
+$ npm install --save-dev browserify babelify watchify
+```
+
+Running the following command will first run `browserify` to bundle up your modules. Then it'll pass the result to `babelify` which will transform your code and output the result to `dist/app.js`
+
+```sh
+browserify js/app.js -t babelify -o dist/app.js
+```
+
+> Replace `browserify` by `watchify` to watch files and re-build automatically.
+
+---
+## This is really exhausting !
+
+.bigger[
+Right now I want to build features...not spend my entire semester configuring `babel`, `polyfills`, `watchify` or God knows what !
+]
+
+<iframe src="https://giphy.com/embed/l1J3I2AACdYouQQec" width="480" height="256" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+
+---
+## Solution
+
+.bigger[
+- Use projects starter templates such as [Yeoman](http://yeoman.io)
+- Use module bundlers such as [Webpack](https://webpack.js.org/), [Parcel](https://parceljs.org/), [Rollup](https://rollupjs.org/)
+- Use task runners such as [Gulp](https://gulpjs.com/) or [Grunt](https://gruntjs.com/)
+]
+
+---
+## References
+- [What’s the difference between JavaScript and ECMAScript?](https://medium.freecodecamp.org/whats-the-difference-between-javascript-and-ecmascript-cba48c73a2b5)
+- [Compatibility table](http://kangax.github.io/compat-table/es6/)
+- [Babel usage guide](https://babeljs.io/docs/en/usage)
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg">
+
+---
+name: deployment
+class: middle, center
+## How can we deploy our services “to the cloud” ?
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg">
+.breadcrumbs[[Deployment](#deployment)]
+
+---
+## How can we deploy our services “to the cloud” ?
+
+.bigger[
+- Our app consists of multiple components (services): front-end assets, back-end API, crawler.
+- We want to make them publicly available, so we need to “deploy” them somewhere.
+- There are many ways to do that, how do we pick one? In our particular case, money and ease of use are 2 constraints.
+]
+
+---
+## Solution
+
+.bigger[
+- We can use a combination of “providers” to deploy our different components.
+- Serving the client-side assets is very easy with GitHub Pages.
+- For the back-end API and the crawler, Heroku is a PaaS provider that we can use for free.
+]
+
+---
+## What is PaaS
+
+.bigger[
+- PaaS stands for Platform as a Service
+- It is one type of “cloud provider”, which allows you to deploy applications (you don’t worry about the OS, the DB, etc.)
+- Other types of “cloud providers” include SaaS (e.g. Google Docs) and IaaS (e.g. Amazon Web Services EC2)
+]
+
+---
+## Experiment with Github pages
+
+.bigger[
+- Create a repo
+- configure Pages
+- Push your assets
+
+You'll find a step by step guide in Github pages' [home page](https://pages.github.com/)
+]
+
+---
+## Experiment with Heroku
+
+.bigger[
+Heroku manages app deployments with Git. It supports many languages - Node.js, Ruby, Java, Scala, etc..
+
+Heroku also integrates well with tools such as Docker.
+
+- Follow instructions in the [getting started guide](https://devcenter.heroku.com/articles/getting-started-with-nodejs) for Node.js
+- Explore Add-ons such as [mlab](https://elements.heroku.com/addons/mongolab) and [Heroku Scheduler](https://elements.heroku.com/addons/scheduler)
+]
+
+---
+## Github analytics - Todo List
+
+.bigger[
+- Validate that we are able to serve our client assets (HTML + CSS + Javascript) with GitHub Pages.
+- Follow the Heroku tutorial and learn how to deploy a Node.js application (alternative: look at docker deployment)
+- Validate that you are able to deploy your back-end API server to Heroku.
+- Experiment with “one-off” dynos and the scheduler add-on.
+- validate that you can execute your script on a period basis.
+]
