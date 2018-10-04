@@ -218,6 +218,18 @@
     display: flex;
     align-items: flex-start;
   }
+
+  .col {
+    &.flex {
+      flex: 1;
+    }
+    &.padding-right {
+      padding-right: 1em;
+    }
+    &.padding-left {
+      padding-left: 1em;
+    }
+  }
   
   .smaller {
     font-size: 0.85em;

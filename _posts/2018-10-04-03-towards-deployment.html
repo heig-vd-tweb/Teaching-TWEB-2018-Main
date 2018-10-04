@@ -1,0 +1,405 @@
+---
+title: Towards deployment
+date: 2018-10-04 07:17:00 +0200
+categories: slides
+excerpt: |
+  Deploy your Node.js and static apps. Learn how to write better asynchronous code with the power of Javascript promises and how to fetch data. Structure and prepare your projects for production - dealing with javascript languages versions, browser compatibilities and build pipelines.
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, left
+# 03 - Towards deployment
+.subheading[Prepare your project for production]
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+## Daily menu
+
+---
+name: async-is-hard
+## Writing async code is hard
+.bigger[Even if it is easy to understand the notion of callback, it is difficult to orchestrate multiple async operations]
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Writing async code is hard](#async-is-hard)]
+
+---
+## Forces
+
+.bigger[
+- Writing async code is not an option with Javascript.
+- It is also becoming increasingly important in other languages.
+- Writing code with callbacks quickly leads to problems: deeply nested “pyramids”, unreadable code, tricky bugs...
+]
+
+---
+## Solution (1)
+
+Once upon a time (4 years ago), we had to use libraries such as [async.js](http://caolan.github.io/async/) to orchestrate multiple async operations - parallel(), series(), waterfall(), etc..
+
+```javascript
+var async = require('async');
+
+async.waterfall([
+    function(callback) {
+        callback(null, 'one', 'two');
+    },
+    function(arg1, arg2, callback) {
+        // arg1 now equals 'one' and arg2 now equals 'two'
+        callback(null, 'three');
+    },
+    function(arg1, callback) {
+        // arg1 now equals 'three'
+        callback(null, 'done');
+    }
+], function (err, result) {
+    // result now equals 'done'
+});
+```
+
+---
+## Solution (1)
+
+Rewrite this pyramid...
+
+```javascript
+milkCow( function(err, milk) {
+  console.log("I have " + milk + " and can prepare cheese.");
+  prepareCheese(milk, function(err, cheese) {
+    console.log("I have now " + cheese + " and can sell it.");
+    sellCheese(cheese, function(err, money) {
+      console.log("Youpi! I have my money.");
+    });
+  });
+});
+```
+
+into (cleaner) code
+
+```javascript
+async.waterfall([milkCow, prepareCheese, sellCheese], callback);
+
+function callback(err, money) {
+    console.log("Youpi! I have my money.");
+}
+```
+
+---
+## Solution (2)
+
+.bigger[
+- Promises make dealing with **async** code and **errors** significantly **easier**  
+- Promises have been proposed as a **standard** way to write async code.
+- Initially, there was a specification (Promises/A+) with multiple implementations (bluebird, Q and tens of others).
+- Today, Promises have been integrated in ECMAScript. Libraries provide additional features.
+]
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, center
+name: promises 
+## Javascript Promises
+.bigger[Let's talk about this]
+
+---
+layout: true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Javascript Promises](#promises)]
+
+---
+## Definition
+
+A `promise` is an object representing the eventual completion or failure of an
+asynchronous operation, and its resulting value.
+
+Essentially, a promise is an object you attach callbacks to...
+
+```javascript
+let promise = fetchUser('paulnta');
+// Attaching a callback using .then()
+promise.then(function(user) {
+  // do something with user
+});
+```
+
+...instead of passing callbacks into a function.
+
+```javascript
+// Passing a callback
+fetchUser('paulnta', function(error, user) {
+  // do something with the user
+});
+```
+
+---
+## Creating promises
+
+The constructor syntax for a promise object is:
+
+```javascript
+let promise = new Promise(function(resolve, reject) {
+  setTimeout(() => {
+    resolve('Ok, I am done working!')
+  }, 1000)
+});
+```
+
+The promise constructor takes an executor function that lets us 
+- `resolve(value)` - to indicate that the job finished successfully
+- `reject(error)` -  to indicate that an error occurred
+---
+## Creating promises
+
+Promises have a `state` property
+- `pending` - the operation is not completed yet
+- `fulfilled` - the operation is completed
+- `rejected` - the operation has failed
+
+Promises have a single `result` property.
+- It can be `undefined`
+- or the result of the async operation.
+
+---
+## Creating promises
+
+<img src="{{site.baseurl}}/images/03-promise-resolve-reject.png" alt="Promise resolve reject" width="100%">
+
+---
+## Creating promises
+
+```javascript
+let promise = new Promise(function(resolve, reject) {
+  if (typeof ([] + []) === "string") {
+    reject(new Error('Javascript sucks, but I like it!'))
+  } else {
+    resolve('Thank you!')
+  }
+});
+```
+
+- Only one call to `resolve` or `reject` is taken into account
+- `resolve` and reject `accepts` only one argument
+- Always call `reject` with error objects
+- Immediately calling resolve/reject is totally fine
+
+---
+## Ok I have a promise now what ?
+
+```javascript
+let promise = functionThatReturnsAPromise();
+promise.then(
+  function(result) { /* Handle successful result */ },
+  function(error) {  /* Handle error */ }
+);
+```
+
+The first argument of `.then` is a function that:
+- runs when the Promise is resolved, and
+- receives the result.
+
+The second argument of `.then` is a function that:
+- runs when the Promise is rejected, and
+- receives the error.
+
+---
+## Ok I have a promise now what ?
+
+If you’re interested only in successful completions, then you can provide only one function argument to `.then`
+
+```javascript
+let promise = new Promise(resolve => {
+  setTimeout(() => resolve("done!"), 1000);
+});
+
+promise.then(console.log); // logs "done!" after 1 second
+```
+
+---
+## Ok I have a promise now what ?
+
+If you're interested only in errors, then you can use `null` as the first argument: `.then(null, errorHandler)`. Or you can use `.catch(errorHandler)`, which is exactly the same:
+
+```javascript
+let promise = new Promise((resolve, reject) => {
+  setTimeout(() => reject(new Error("Whoops!")), 1000);
+});
+
+promise.catch(console.log);
+// same as promise.then(null, console.log)
+// logs "Error: Whoops!" after 1 second
+```
+
+---
+## Ok I have a promise now what ?
+
+```javascript
+let promise = new Promise((resolve) => resolve('done'));
+
+console.log('After promise creation');
+
+promise.then((result) => console.log(`first ${result}`));
+promise.then((result) => console.log(`second ${result}`));
+
+// After promise creation
+// first done
+// second done
+```
+
+- Callbacks will never be called before the completion of the current run of the JavaScript event loop.
+- Callbacks added with then() even after the success or failure of the asynchronous operation, will be called.
+- Multiple callbacks may be added by calling then() several times. Each callback is executed one after another, in the order in which they were inserted.
+
+---
+## Promises chaining
+.row[
+
+  .col.flex.padding-right[
+
+```javascript
+new Promise((resolve, reject) => {
+  setTimeout(() => resolve(1), 1000);
+})
+  .then((result) => result * 2)
+  .then((result) => result * 2)
+  .then(console.log)
+  // logs 1, in 1 second
+```
+
+- Multiple asynchronous tasks can be easily chained.
+- a call to `promise.then` returns a promise 
+- the result of a handler can be a promise
+- When a handler returns a value, it becomes the result of that promise
+
+  ]
+
+  <img src="{{site.baseurl}}/images/03-promise-chaining.png" height="400px">
+]
+
+---
+## Promises chaining
+
+This code is a messy
+
+```javascript
+milkCow( function(err, milk) {
+  prepareCheese(milk, function(err, cheese) {
+    sellCheese(cheese, function(err, money) {
+      console.log("Youpi! I have my money.");
+    });
+  });
+});
+```
+
+This code tells a story
+
+```javascript
+  milkCow()
+    .then(prepareCheese)
+    .then(sellCheese)
+    .then(money => {
+      console.log('Youpi! I have my money.')
+    })
+```
+
+---
+## Real world example
+
+We'll use the [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) method to load the information about a user from the Github API.
+
+Fetch performs a network request and returns a promise. The promise resolves with a response object when the remote server responds with headers, but **before the full response is downloaded**.
+
+```javascript
+let promise = fetch(`https://api.github.com/users/paulnta`)
+```
+
+To read the full response, we should call a method `response.json()`
+
+```javascript
+promise.then(response => response.json())
+```
+
+---
+## Real world example
+
+```javascript
+function getUserAvatar(username) {
+  return fetch(`https://api.github.com/users/${username}`)
+    .then(response => response.json())
+    .then(user => user.avatar_url);
+}
+```
+
+```javascript
+getUserAvatar('paulnta')
+  .then(avatar_url => {
+    const img = document.createElement('img');
+    img.src = avatar_url;
+    document.body.append(img);
+  })
+```
+
+**What if `getUserAvatar()` fails ?**
+
+---
+## Real world example
+
+```diff
+function getUserAvatar(username) {
+  return fetch(`https://api.github.com/users/${username}`)
+    .then(response => {
+*     if (!response.ok) throw new Error('Not found!');
+      return response.json();
+    })
+    .then(user => user.avatar_url);
+}
+```
+
+```diff
+getUserAvatar('paulnta')
+  .then(avatar_url => {
+    const img = document.createElement('img');
+    img.src = avatar_url;
+    document.body.append(img);
+  })
+* .catch(err => {
+*   const p = document.createElement('p');
+*   p.innerText = 'Sorry';
+*   document.body.append(p);
+* })
+```
+
+---
+## Parallel
+
+You can easily run things in parallel by creating an array of promises
+
+```javascript
+const users = ['paulnta', 'edri', 'wasadigi'];
+const requests = users.map(getUserAvatar);
+```
+
+Then use `Promise.all()` method to wait for all promises to resolve. 
+
+```javascript
+Promise.all(requests)
+  .then(avatars => {
+      avatars.forEach(avatar_url => {
+        const img = document.createElement('img');
+        img.src = avatar_url;
+        document.body.append(img);
+      })
+  })
+```
+
+If any of the promises is rejected, `Promise.all` immediately rejects with that error.
+
