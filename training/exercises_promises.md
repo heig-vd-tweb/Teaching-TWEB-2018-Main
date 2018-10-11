@@ -58,13 +58,12 @@ let promise = new Promise((resolve) => {
   resolve();
 })
 
-7\)
 promise.then(() => console.log(3));
 console.log(4);
 // Answer: 1243
 ```
 
-8\)
+7\)
 ```js
 function test() {
   new Promise(resolve => resolve('ok'))
@@ -75,7 +74,7 @@ function test() {
 // What does `test();` return? => undefined
 ```
 
-9\)
+8\)
 ```js
 function test() {
  return new Promise(resolve => resolve('ok'))
@@ -86,7 +85,7 @@ function test() {
 // What does `test();` return? => a promise
 ```
 
-10\)
+9\)
 ```js
 Promise.resolve()
 .then(
@@ -97,7 +96,7 @@ Promise.resolve()
 // Answer: catch 2
 ```
 
-11\)
+10\)
 ```js
 const p1 = (data) => new Promise((resolve, reject) => data > 2 ? resolve('A') : reject('Z'));
 p1(1).then(z => console.log('O'), a => console.log('U'));
@@ -105,7 +104,7 @@ p1(5).then(z => console.log('O'), a => console.log('U'));
 // Answer: U O
 ```
 
-12\)
+11\)
 ```js
 new Promise((resolve) => { throw new Error('Woups'); })
   .catch(error => console.log(error.message))
@@ -113,7 +112,7 @@ new Promise((resolve) => { throw new Error('Woups'); })
 // Answer: Woups done
 ```
 
-13\)
+12\)
 ```js
 function getValue() {
   if (true) return 1;
@@ -124,7 +123,7 @@ getValue().then(v => console.log('the value is ' + v));
 // How to fix it ? Promise.resolve(1), Promise.resolve(getValue())
 ```
 
-14\)
+13\)
 ```js
 for (var i = 0; i < 3; ++i) {
   setTimeout(() => { console.log(i) }, 100);
@@ -132,7 +131,7 @@ for (var i = 0; i < 3; ++i) {
 // Answer: 333 => the synchronous loop is totally executed before the asynchronous code.
 ```
 
-15\)
+14\)
 ```js
 let a = 0;
 
@@ -145,7 +144,7 @@ console.log(a);
 // Answer: 0 => use Promise.all
 ```
 
-16\)
+15\)
 ```js
 function sendLoggingData(req) {
   return new Promise((resolve, reject) => {
