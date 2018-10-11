@@ -471,6 +471,8 @@ const range = [...Array(5).keys()].map(i => i + 10)
 // [10, 11, 12, 13, 14]
 ```
 
+http://es6-features.org/
+
 ---
 layout: true
 name: Writing next generation JavaScript.
@@ -481,14 +483,34 @@ name: Writing next generation JavaScript.
 ## Javascript flavours
 
 .bigger[
-- We have seen that there are different generations of Javascript (ES5, ES6, etc.).
-- You may also have heard about other languages “related” to Javascript: Typescript, CoffeeScript or Flow
-- As a developer, you may want to use the last features of the language.
-- On the server side, you have control on the runtime environment. On the client side, you don’t.
+- We have seen that there are different **generations** of Javascript (ES5, ES6, etc.).
+- You may also have heard about other **languages** “related” to Javascript: Typescript, CoffeeScript or Flow
+- As a developer, you may want to use the **last features** of the language.
+- On the server side, you have control on the runtime environment. On the client side, you don’t. 
 ]
 
 ---
+### ES6 Compatibility table 
+
+<a href="http://kangax.github.io/compat-table/es6/">
+  <img src="{{site.baseurl}}/images/03-compatibility-table.png" width="100%" />
+</a>
+
+.footnote[http://kangax.github.io/compat-table/es6/]
+
+---
+## Can I use ... Promises ?
+
+<a href="https://caniuse.com/#search=promises">
+  <img src="{{site.baseurl}}/images/03-caniuse-promise.png" width="100%" />
+</a>
+
+.footnote[https://caniuse.com]
+
+---
 ## Solution
+
+<img src="{{site.baseurl}}/images/03-babel-logo.png" height="150px" />
 
 .bigger[
 - There are tools that transform (transpile) different dialects of Javascript in code that is understood by older engines.
@@ -496,17 +518,17 @@ name: Writing next generation JavaScript.
 - It gives you a command line tool, which takes “modern” Javascript files as input and generates “universal” Javascript as output.
 ]
 
-[Try Babel REPL](https://babeljs.io/repl#?babili=false&browsers=safari%20%3E%209&build=&builtIns=false&spec=false&loose=false&code_lz=DYUwLgBArgziBOMIF4IG0DkAHAhlYAdmDhgDQQYgAm8AlhgLoDcAULAkqmgHS_uLkMAdxwwcVWgHN6zFiwDGAewIxIaCLnzle3RWAAWHCAxTQ4iJkA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env&prettier=false&targets=&version=6.26.0&envVersion=1.6.2)
+[Try Babel REPL](https://babeljs.io/repl#?babili=false&browsers=safari%20%3E%209&build=&builtIns=false&spec=false&loose=false&code_lz=FAYw9gdgzgLgBFAhgTwBIFMA2mxwLxwAUEiAtugJT4B8cA3sHHAE7owCuzEcABhtrgAkdEuQC-cAIQ8A3E2BjgwJGiw5CAcgAKidpg0U5AeiNx-OODr1SgA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=&prettier=false&targets=&version=6.26.0&envVersion=1.6.2)
 
 
 ---
 ## Back to basics
 
 - Browsers use different engines (V8, Chakra, SpiderMonkey, JavascriptCore etc..) to translate javascript to machine code.
-- Engines are an implementation of the Javascript Language
+- **Engines are an implementation** of the Javascript Language
 - Javascript is a general purpose scripting language that conforms to the ECMAScript specification
 - ECMAScript is a specification for what a scripting language could look like
-- Releasing a new edition of ECMAScript does not mean that all JavaScript engines in existence suddenly have those new features
+- **Releasing a new edition of ECMAScript** does not mean that all JavaScript engines in existence suddenly have those new features
 - Engines incorporate new ECMAScript features [incrementally](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_2015_support_in_Mozilla)
 - ECMAScript 5 (ES5) is [widely supported](http://kangax.github.io/compat-table/es5/)
 - Current browsers [dont support all](http://kangax.github.io/compat-table/es6/) the ECMAScript 6 (ES6, ES2015)
@@ -514,9 +536,9 @@ name: Writing next generation JavaScript.
 ---
 ## What should I do ?
 
-- Define your supported environments. Which browsers (or Node.js versions) your app needs to support
-- Write code in the latest version of JavaScript
-- If needed, use babel to compile your code down to supported environments
+- Define your **supported environments**. Which browsers (or Node.js versions) your app needs to support
+- Write code in the **latest version** of JavaScript
+- If needed, **use babel** to compile your code down to supported environments
 
 ---
 ## How babel works ?
@@ -528,6 +550,14 @@ They are two tasks babel performs when compiling your code we need to understand
 
 **polyfilling** - For this task, babel injects polyfills into your code. A polyfill is a code that implement a missing **feature** on a browser. For example `Promise` doesn't exist in IE 11 or Safari 10 and this feature needs to be simulated to work on those browsers.
 
+```js
+window.foo = window.foo || function fooPolyfill() {
+	alert('bar !')
+};
+
+fooPolyfill() // bar !
+```
+
 ---
 ## Babel
 
@@ -535,7 +565,7 @@ There are quite a few tools in the Babel toolchain. Thoses tools (modules) are p
 
 - `@babel/core` - Where Babel's core functionality resides. This module is required to use babel.
 - `@babel/cli` - Allows you to use babel from the terminal.
-- `@babel/polyfill` - contains necessary code to emulate a full ES2015+ environment. *Promise*, *Fetch*, *Array.prototype.includes*, etc...
+- `@babel/polyfill` - contains necessary code to emulate a full ES2015+ environment. *Promise*, *Object.keys*, *Array.prototype.includes*, etc...
 - `@babel/plugin-transform-xxxx` - Transformations come in the form of plugins, which are small JavaScript programs that instruct Babel on how to transform your code syntax.
 - `@babel/preset-xxx` - A preset is just a pre-determined set of plugins.
 
