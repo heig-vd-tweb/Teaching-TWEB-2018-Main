@@ -71,7 +71,12 @@
   }
 
   .remark-code {
+    font-size: 18px;
     background: #F6F8FA !important;
+  }
+
+  .smaller .remark-code {
+    font-size: 14px;
   }
 
   /**
@@ -83,6 +88,15 @@
     border-left: 0.25em solid #dfe2e5;
     margin: 1.25em 0;
   }
+
+  /**
+   * Footnotes
+   */
+   .footnote {
+    position: absolute;
+    bottom: 20px;
+    left: 72px;
+   }
 
   /**
    * Links
@@ -152,6 +166,14 @@
       margin-top: 0.5em;
     }
 
+    /**
+     * Images
+     */
+     img.align-center {
+       display: block;
+       margin: 0 auto;
+     }
+
    /**
     * Badges
     */
@@ -216,7 +238,6 @@
   
   .row {
     display: flex;
-    align-items: flex-start;
   }
 
   .col {
