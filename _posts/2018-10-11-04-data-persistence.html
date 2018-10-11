@@ -22,11 +22,10 @@ layout:true
 
 .bigger[
 - Javascript and Promises training
-- Build pipelines
-- Project structure
 - Data persistence
   - MongoDB
   - Mongoose
+- (Build pipelines)
 ]
 
 ---
@@ -86,7 +85,7 @@ class: middle, center
 ## How ?
 
 .bigger[
-- First, understand **how data is organised** in MongoDB: databases, collections, documents, no schema.
+- First, understand **how data is organised** in MongoDB: databases, collections, documents, fields.
 - Then, learn how to perform **CRUD** operations via the console.
 - Finally, learn how to do the same operations in **Javascript**.
 - One more thing: learn about **Mongoose**.
@@ -135,7 +134,7 @@ It is a schema-less document-oriented database:
   <img src="{{site.baseurl}}/images/04-relational-vs-document.png" height="350px" />
 </figure>
 
-With rich document data model (on the right), all of the blog data is aggregated within a single document, linked with a single reference to a user document
+With Rich Document Data Model (on the right), all of the blog data is aggregated within a single document, linked with a single reference to a user document
 
 ---
 name: data-modeling
@@ -170,7 +169,7 @@ known as **normalized** data model — describe relationships using references b
 ---
 ### When to embed data ?
 
-Embedding data allows to retrieve information with fewer queries and provides better read performance. It's also possible to update related data in a single atomic write operation.
+Embedding data allows to retrieve information with *fewer queries* and provides *better read performance*. It's also possible to update related data in a single *atomic write* operation.
 
 You should **favor embedding**
 
@@ -186,13 +185,13 @@ You should **favor embedding**
 ---
 ### When to use references ?
 
-Using normalized data models provides more flexibility than embedding, but requires an application-level joins to get complete information
+Using normalized data models provides *more flexibility* than embedding, but requires an *application-level* joins to get complete information
 
 Use normalized data models:
 
-- When embedding would result in duplication of data but would not provide sufficient read performance advantages to outweigh the implications of the duplication.
-- to represent more complex many-to-many relationships.
-- to model large hierarchical data sets
+- When embedding would result in **duplication** of data but would not provide sufficient read performance advantages to outweigh the implications of the duplication.
+- to represent more **complex many-to-many** relationships.
+- to model large **hierarchical** data sets
 
 > If you index correctly and use the projection specifier then application-level joins are barely more expensive than server-side joins in a relational database.
 
@@ -472,6 +471,14 @@ Read operations retrieves documents from a collection.
 </table>
 
 ---
+### References
+
+- [Install MongoDB](https://docs.mongodb.com/guides/server/install/)
+- [6 Rules of Thumb for MongoDB Schema Design: Part 1](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1)
+- [MongoDB CRUD Operations](https://docs.mongodb.com/manual/crud/)
+
+
+---
 layout:true
 <img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
 
@@ -495,7 +502,7 @@ In the **Java ecosystem**, it is possible to interact with a RDBMS by using a JD
 - The program manipulates tabular result sets returned by the driver.
 
 With **Node.js and mongoDB**, the process is similar:
-- There is a Node.js driver for mongoDB (in fact, there are several).
+- There is a [Node.js driver for mongoDB](https://mongodb.github.io/node-mongodb-native/) (in fact, there are several).
 - A Node.js module can connect to a mongoDB server and issue queries to manipulate collection and documents.
 
 ---
