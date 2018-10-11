@@ -1,0 +1,746 @@
+---
+title: Data Persistence
+date: 2018-10-11 07:17:00 +0200
+categories: slides
+excerpt: |
+  NoSQL databases are essential to big data processing and data-intensive applications. Learn best practices for storing data in a NoSQL database like MongoDB and how to interact with it from a Node.js application using mongoose.
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, left
+# Data Persistence
+.subheading[Structuring data for mongoDB]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+## Daily menu
+
+.bigger[
+- Javascript and Promises training
+- Build pipelines
+- Project structure
+- Data persistence
+  - MongoDB
+  - Mongoose
+]
+
+---
+class: middle, center
+## Javascript basics and Promises...all clear ?
+
+---
+### Javascript basics
+
+Are you familiar with arrow functions ?
+
+```js
+[...].then(function (value) {
+  return value + 1;
+});
+```
+
+```js
+[...].then((value) => {
+  return value + 1;
+});
+```
+
+```js
+[...].then(value => value + 1);
+```
+
+```js
+const increment = (v) => v + 1;
+[...].then(increment);
+```
+
+---
+name: storing-data
+class: middle, center
+## Where do I store my data ?
+
+---
+## Where do I store my data ?
+
+.bigger[
+- For a long time, web applications were storing data in RDBMS (MySQL, Postgres)
+- About 10 years ago, many alternatives started to appear. Today, we can choose between hundreds of “NoSQL” databases.
+- Which one should we look at and how do we use it?
+]
+
+---
+## Where do I store my data ?
+
+.bigger[
+- There are different types of NoSQL databases: key-value stores, graph databases, document stores, etc.
+- Document stores allow us to store semi-structured information, similar to JSON payloads.
+- MongoDB was one of the early popular document stores. It still is.
+]
+
+---
+## How ?
+
+.bigger[
+- First, understand how data is organised in MongoDB: databases, collections, documents, no schema.
+- Then, learn how to perform CRUD operations via the console.
+- Finally, learn how to do the same operations in Javascript.
+- One more thing: learn about Mongoose.
+]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, center
+name: mongodb
+## MongoDB
+.bigger[Document oriented NoSQL Database]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[MongoDB](#mongodb)]
+
+---
+### Definition
+
+MongoDB is one of the most popular NoSQL databases (and one of the first to have been categorized as such).
+
+It is a schema-less document-oriented database:
+- The data store is made of several **collections**.
+- Every collection contains a set of **documents**, which you can think of as JSON objects.
+- The structure of documents is not defined a priori and is not enforced. This means that a collection can contain documents that have different **fields**.
+
+> MongoDB stores JSON documents in a binary representation called BSON (Binary JSON). BSON encoding extends the popular JSON representation to include additional data types such as int, long, and floating point.
+
+---
+### Rich Document Data Models
+
+- Relation data models flattens data into rigid 2-dimensional tabular structure of rows and columns
+- In contrast, rich document data models can have embedded sub-documents and arrays
+<figure>
+  <img style="display: block; margin: 0 auto;" src="{{site.baseurl}}/images/04-tables-vs-document.png" height="350px" />
+</figure>
+
+---
+### Relational data vs Rich document data models
+
+<figure>
+  <img src="{{site.baseurl}}/images/04-relational-vs-document.png" height="350px" />
+</figure>
+
+With rich document data model (on the right), all of the blog data is aggregated within a single document, linked with a single reference to a user document
+
+---
+name: data-modeling
+### Data modeling
+
+.bigger[
+- Creating a data model with MongoDB does not have to follow the rules that apply for relational databases. Often, they should not.
+- However, the data should be organized depending on the **application needs** — how your application queries and updates data.
+- Consider the **performance characteristics** of the database engine.
+- The key consideration for the structure of your documents is the decision to **embed** or to use **references**.
+]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[MongoDB](#mongodb) > [Data modeling](#data-modeling)]
+
+---
+### Embedded Data
+
+Generally known as **denormalized** data model
+
+<img src="{{site.baseurl}}/images/04-document-embedded.svg" />
+
+---
+### References
+
+known as **normalized** data model — describe relationships using references between documents.
+
+<img src="{{site.baseurl}}/images/04-document-references.svg" />
+
+---
+### When to embed data ?
+
+Embedding data allows to retrieve information with fewer queries and provides better read performance. It's also possible to update related data in a single atomic write operation.
+
+You should **favor embedding**
+
+- When you have “contains” relationships between entities
+- When you have “One-to-Few” relationships between entities
+
+...unless there is a compelling **reason not to**
+
+- When there is a risk to reach the maximum BSON document size (16Mb)
+- When embedding would result in unwanted duplication of data (sub-documents)
+- When needing to access an object on its own
+
+---
+### When to use references ?
+
+Using normalized data models provides more flexibility than embedding, but requires an application-level joins to get complete information
+
+Use normalized data models:
+
+- When embedding would result in duplication of data but would not provide sufficient read performance advantages to outweigh the implications of the duplication.
+- to represent more complex many-to-many relationships.
+- to model large hierarchical data sets
+
+> If you index correctly and use the projection specifier then application-level joins are barely more expensive than server-side joins in a relational database.
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[MongoDB](#mongodb)]
+
+---
+### Relationships
+
+---
+### One-to-one relationships
+
+.row[
+  .col.flex.padding-right[
+
+**Normalized data model**  
+2 documents (requires 2 queries to get all of the person data)
+
+```js
+> db.addresses.findOne()
+{
+* contact_id: "joe",
+  street: "123 Fake Street",
+  city: "Faketon",
+  state: "MA",
+  zip: "12345"
+}
+
+> db.contacts.findOne({ _id: "joe" })
+{
+* _id: "joe",
+  name: "Joe Bookreader"
+}
+```
+  ]
+
+  .col.flex.padding-left[
+
+**Embeeded data model**  
+single document (requires only 1 query to get all the person data)
+
+```js
+> db.contacts.findOne()
+{
+  _id: "joe",
+  name: "Joe Bookreader",
+  address: {
+*   street: "123 Fake Street",
+*   city: "Faketon",
+*   state: "MA",
+*   zip: "12345"
+  }
+}
+```
+  ]
+]
+
+---
+### One-to-N relationships
+
+.bigger[
+There is different ways to describe One-to-N relationships:
+  - One-to-Few
+  - One-to-Many
+  - One-to-Squillions 
+
+Again, it depends on your application needs. Each methods for structuring has its pros and cons
+]
+
+---
+### One-to-Few
+
+The **embedded data model** allows you to retrieve complete information with one query :
+
+.smaller[
+```js.
+> db.contacts.findOne()
+{
+  _id: "joe",
+  name: "Joe Bookreader",
+  addresses: [
+*   {
+*     street: "123 Fake Street",
+*     city: "Faketon",
+*     state: "MA",
+*     zip: "12345"
+*   },
+*   {
+*     street: "1 Some Other Street",
+*     city: "Boston",
+*     state: "MA",
+*     zip: "12345"
+*   }
+  ]
+}
+```
+]
+
+No way of accessing the embedded details `addresses` as stand-alone entities
+
+---
+### One-to-Many
+
+.smaller[
+Using **references** provides more flexibility. This method can also be used to describe Many-to-Many relationships without the need of a join table.
+
+```js
+> db.publishers.findOne()
+{
+  name: "O'Reilly Media",
+  founded: 1980,
+  location: "CA",
+* books: [123456789, 234567890, ...]
+}
+```
+```js
+> db.books.find({ _id: { $in: [123456789, 234567890, ...] }})
+{
+* _id: 123456789,
+  title: "MongoDB: The Definitive Guide",
+  author: [ "Kristina Chodorow", "Mike Dirolf" ],
+  published_date: ISODate("2010-09-24"),
+  pages: 216,
+  language: "English"
+}
+
+{
+* _id: 234567890,
+  title: "50 Tips and Tricks for MongoDB Developer",
+  author: "Kristina Chodorow",
+  published_date: ISODate("2011-05-06"),
+  pages: 68,
+  language: "English"
+}
+```
+]
+
+???
+Pros:
+- Easy to search and update documents independently
+- N-to-N relationships for free
+---
+### One-two-Squillions
+
+.smaller[
+
+```js
+> db.hosts.findOne()
+{
+* _id : ObjectID('AAAB'),
+  name : 'gaps.heig-vd.ch',
+  ipaddr : '127.66.66.66'
+}
+```
+
+```js
+> db.logs.find({ host: ObjectID('AAAB') }).sort({time : -1}).limit(5000)
+{
+  time : ISODate("2014-03-28T09:42:41.382Z"),
+  message : 'cpu is on fire!',
+* host: ObjectID('AAAB')       // Reference to the Host document
+}
+{
+  time : ISODate("2014-03-28T09:42:40.123Z"),
+  message : 'all clear for now',
+* host: ObjectID('AAAB')       // Reference to the Host document
+}
+...
+```
+
+]
+
+---
+### Insert data in MongoDB
+
+.bigger[
+- To insert data in MongoDB, you simply have to provide a **JSON document** (with an **arbitrary structure**).
+- The documents in the collection do not have to all have the same structure (this is why we talk about a **schemaless** database).
+
+<figure>
+  <img src="{{site.baseurl}}/images/04-mongodb-insert.svg" height="200px" />
+</figure>
+
+]
+
+---
+### Insert methods
+
+<table class="smaller">
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.insertOne/#db.collection.insertOne">db.collection.insertOne(Document)</a></td>
+  <td>Inserts a single document into a collection.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/#db.collection.insertMany">db.collection.insertMany(Array)</a></td>
+  <td>inserts multiple documents into a collection.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.insert/#db.collection.insert">db.collection.insert(Array|Document)</a></td>
+  <td>inserts a single document or multiple documents into a collection.</td>
+</tr>
+</table>
+
+<iframe class="mws-root" frameBorder="0" allowfullscreen="" sandbox="allow-scripts allow-same-origin" width="100%" height="320" src="https://mws.mongodb.com/?version=3.6"></iframe>
+
+---
+### Query MongoDB
+
+Read operations retrieves documents from a collection.
+
+<figure>
+  <img src="{{site.baseurl}}/images/04-mongodb-query.svg" height="120px" />
+</figure>
+
+- **query criteria** — to filter documents. support query on [nested fields](https://docs.mongodb.com/manual/tutorial/query-embedded-documents/#query-on-nested-field), [arrays](https://docs.mongodb.com/manual/tutorial/query-arrays/), [arrays of embedded documents](https://docs.mongodb.com/manual/tutorial/query-array-of-documents/) and [operators](https://docs.mongodb.com/manual/reference/operator/query/)
+- **projection** - to restrict returned fields. see [project fields from query results](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/)
+- **cursor modifier** - to sort, limit, etc. see [cursor methods](https://docs.mongodb.com/manual/reference/method/js-cursor/index.html)
+
+---
+### Query methods
+
+<table class="smaller">
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.find/">db.collection.find(query, projection)</a></td>
+  <td>Selects documents in a collection or view and returns a cursor to the selected documents</td>
+</tr>
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.findOne/">db.collection.findOne(query, projection)</a></td>
+  <td>Returns one document that satisfies the specified query criteria on the collection or view.</td>
+</tr>
+</table>
+
+
+.smaller[
+> Insert some data, then practice with queries criteria, projections and cursor methods.
+]
+
+<iframe class="mws-root" frameBorder="0" allowfullscreen="" sandbox="allow-scripts allow-same-origin" width="100%" height="320" src="https://mws.mongodb.com/?version=3.6"></iframe>
+
+---
+### Update and delete data in MongoDB
+
+<figure>
+  <img src="{{site.baseurl}}/images/04-mongodb-update.svg" width="100%" />
+</figure>
+
+<figure>
+  <img src="{{site.baseurl}}/images/04-mongodb-delete.svg" width="100%" />
+</figure>
+
+- **update/delete filters** — use the same syntax as read operations.
+- **update action** — contains different operators such as `$set`, `$push`, `$inc`, etc.. [see update operators](https://docs.mongodb.com/manual/reference/operator/update/)
+
+---
+### Update and delete data in MongoDB
+
+<table class="smaller">
+<tr>
+  <td><a href="">db.collection.updateOne()</a></td>
+  <td>Updates a single document within the collection based on the filter</td>
+</tr>
+<tr>
+  <td><a href="">db.collection.updateMany()</a></td>
+  <td>Updates multiple documents within the collection based on the filter.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.deleteOne/">db.collection.deleteOne()</a></td>
+  <td>Removes a single document from a collection.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.deleteMany/#db.collection.deleteMany">db.collection.deleteMany()</a></td>
+  <td>Delete all documents that match a specified filter.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.mongodb.com/manual/reference/method/db.collection.remove/#db.collection.remove">db.collection.remove()</a></td>
+  <td>Delete a single document or all documents that match a specified filter.</td>
+</tr>
+</table>
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+name: accessing-mongodb
+class: middle, center
+## How do I access mongoDB from Node.js
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Accessing mongoDB from Node.js](#accessing-mongodb)]
+
+---
+### You need a driver
+
+In the **Java ecosystem**, it is possible to interact with a RDBMS by using a JDBC driver:
+- The program loads the driver.
+- The program establishes a connection with the DB.
+- The program sends SQL queries to read and/or update the DB.
+- The program manipulates tabular result sets returned by the driver.
+
+With **Node.js and mongoDB**, the process is similar:
+- There is a Node.js driver for mongoDB (in fact, there are several).
+- A Node.js module can connect to a mongoDB server and issue queries to manipulate collection and documents.
+
+---
+### Example 1: connect and insert
+
+```js
+const MongoClient = require('mongodb').MongoClient;
+
+MongoClient.connect('mongodb://localhost:27017/demo')
+  .then((client) => {
+    const db = client.db();
+    const collection = db.collection('test');
+
+    collection.insertOne({ hello : 'doc1' });
+    collection.insertOne({ hello : 'doc2'});
+    collection.insertMany([
+      { hello: 'doc3' },
+      { hello: 'doc4'},
+    ]);
+
+  });
+```
+
+---
+### Example 2: query
+
+```js
+const MongoClient = require('mongodb').MongoClient;
+
+MongoClient.connect('mongodb://localhost:27017/demo')
+  .then((client) => {
+    const collection = client.db().collection('test');
+    const docs = [{ doc: 1 }, { doc: 2 }, { doc: 3 }];
+
+    collection.insertMany(docs)
+      .then(() => {
+        // beware of memory consumption!
+        collection.find().toArray((err, items) => { });
+
+        // better when many documents are returned
+        const stream = collection.find({ doc: { $ne: 2 } })
+          .stream();
+
+        stream.on("data", (item) => { });
+        stream.on("end", () => {});
+
+        // special case when only one document is expected
+        collection.findOne({ doc: 1 }, (err, item) => { });
+      });
+  });
+```
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+name: mongoose
+class: middle, center
+## Object Document Mapping with Mongoose
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+.breadcrumbs[[Mongoose](#mongoose)]
+
+---
+### ORM - Object Relational Mapping
+
+In the **Java EE ecosystem**, you may have seen how the **Java Persistence API** (JPA) specifies a standard way to interact with Object-Relational Mapping (ORM) frameworks.
+  - The developer **first** creates an **object-oriented domain model**, by creating Entity classes and using various annotations (@Entity, @Id, @OneToMany, @Table, etc.)
+  - He **then** uses an **Entity Manager** to **C**reate, **R**ead, **U**pdate and **D**elete objects in the DB.
+  - The ORM framework takes care of the details: **it generates the schema** and the **SQL queries**.
+
+---
+### Mongoose: an O<del>R</del>M for MongoDB
+
+In the **Javascript ecosystem**, we have similar mechanisms.
+  - There is **data mapping tools** such as [mongoose](https://mongoosejs.com/)
+  - It is more appropriate to talk about an Object-Document Mapping tool, rather than an ORM.
+
+> Mongoose provides a straight-forward, schema-based solution to model your application data.
+It includes built-in **type** casting, **validation**, **query building**, business logic **hooks** and more, out of the box.
+
+---
+### Mongoose basics
+
+**Schemas** maps to a MongoDB collection and defines the shape of documents
+
+```js
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/demo');
+
+const { Schema } = mongoose
+const catSchema = new Schema({ name: String })
+```
+
+**Models** are fancy constructors compiled from our Schema definitions
+
+```js
+const Cat = mongoose.model('Cat', catSchema);
+```
+
+**Mongoose documents** represent a one-to-one mapping to documents as stored in MongoDB.
+
+```js
+const kitty = new Cat({ name: 'Zildjian' });
+kitty.save().then(() => console.log('meow'));
+```
+
+---
+### Mongoose: Schemas
+
+```js
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+var blogSchema = new Schema({
+  title: String,
+  author: { type: String, required: true },
+  comments: [{ body: String, date: Date }],
+  date: { type: Date, default: Date.now },
+  hidden: Boolean,
+  meta: {
+    votes: Number,
+    favs:  Number
+  },
+});
+```
+
+- Schemas provides [built-in type](https://mongoosejs.com/docs/schematypes.html) casting
+- Schemas provides [built-in validators](https://mongoosejs.com/docs/validation.html#built-in-validators) `required: true`. It is possible to add [custom validators](https://mongoosejs.com/docs/validation.html#custom-validators)
+- And more... 
+
+
+
+---
+### Mongoose: Models
+
+An instance of a model is called a document. Models are responsible for...
+ - creating documents: `new Model()`, `Model.create()`
+ - reading documents: `Model.find()`, `Model.findById()`, etc..
+ - updating documents: `Model.updateOne()`, `Model.findOneAndUpdate()`, etc..
+ - deleting documents: `Model.remove()`, `Model.removeById()`, etc..
+ 
+...from the underlying MongoDB database.
+
+> Note: When doing `const doc = new Model()`, you get an instance `doc` but nothing is persisted to the database yet.
+You need to call `doc.save()` or use `Model.create(doc)` to save data to the database
+
+.footnote[https://mongoosejs.com/docs/api.html#Model]
+
+---
+### Mongoose: Queries
+
+Here is an example of how can chain queries conditions
+
+```js
+Person
+  .find({ occupation: /host/ })
+  .where('name.last').equals('Ghost')
+  .where('age').gt(17).lt(66)
+  .where('likes').in(['vaporizing', 'talking'])
+  .limit(10)  // at most 10 documents
+  .sort('-occupation')
+  .select('name occupation')  // projection (select some fields)
+  .exec(callback);  // run the query
+```
+
+> Use `.exec()` or `.then()` to actually **run** the query 
+
+---
+### Mongoose: Documents
+
+“Mongoose documents represent a one-to-one mapping to documents as stored in MongoDB. Each document is an instance of its Model.”
+
+You can also use documents to perform operations like
+- saving: `doc.save()`.
+- updating: `doc.field = 4`, `doc.set({ field: 4 })`
+- accessing fields: `doc.field`, `doc.toJSON()`, `doc.toObject()`
+- and more
+
+.footnote[https://mongoosejs.com/docs/documents.html]
+
+---
+### Mongoose and Promises
+
+“Mongoose async operations, like `.save()` and queries, return thenables.
+This means that you can do things like `MyModel.findOne({}).then()` and `await MyModel.findOne({}).exec()` if you're using async/await.”
+
+```js
+var gnr = new Band({
+  name: "Guns N' Roses",
+  members: ['Axl', 'Slash']
+});
+
+var promise = gnr.save();
+assert.ok(promise instanceof Promise);
+
+promise.then(function (doc) {
+  assert.equal(doc.name, "Guns N' Roses");
+});
+```
+
+.footnote[https://mongoosejs.com/docs/promises.html#built-in-promises]
+
+---
+### Mongoose and Promises
+
+“Mongoose queries are not promises. They have a `.then()` function for co and async/await as a convenience. If you need a fully-fledged promise, use the `.exec()` function.”
+```js
+var query = Band.findOne({name: "Guns N' Roses"});
+assert.ok(!(query instanceof Promise));
+
+// A query is not a fully-fledged promise,
+// but it does have a `.then()`.
+query.then(function (doc) {
+  // use doc
+});
+
+// `.exec()` gives you a fully-fledged promise
+var promise = query.exec();
+assert.ok(promise instanceof Promise);
+
+promise.then(function (doc) {
+  // use doc
+});
+```
+
+.footnote[https://mongoosejs.com/docs/promises.html#queries-are-not-promises]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+## Webcasts
+
+- [Bootcamp 4.1: Intro aux webcasts "MongoDB"](https://youtu.be/2smeysYSfLA)
+- [Bootcamp 4.2: prise en main de MongoDB](https://youtu.be/NK9g8Do-mO0)
+- [Bootcamp 4.3 (a): identification de la source de données JSON](https://youtu.be/hJVX54qEqBA)
+- [Bootcamp 4.3 (b): utilisation de request-promise pour interroger l'API REST](https://youtu.be/hpURE3knRqE)
+- [Bootcamp 4.4: utilisation du driver node.js MongoDB](https://youtu.be/KqQIPOBX1A4)
+- [Bootcamp 4.5: implémentation de la chaîne de promesses](https://youtu.be/J9C_GgfOqYo)
+
