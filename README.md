@@ -10,7 +10,8 @@ During the course, you'll work on 2 different projects.
 
 The first part of the course (week 1 - 5) has a strong focus on Javascript foundations – Improving core javascript skills and asynchronous programming.
 
-In the second part of the course (week 6 -16) we will look at many tools, frameworks, techniques and see how we can improve the performance of a web app, the user experience and also the developer experience.
+In the second part of the course (week 6 -16) we will look at many tools, frameworks, techniques and see how we can improve the performance of a web app, the user experience and also the developer experience.  
+
 
 | Week | Courses                                                      | Deadline                      |
 | ---- | ------------------------------------------------------------ | ----------------------------- |
@@ -30,7 +31,7 @@ In the second part of the course (week 6 -16) we will look at many tools, framew
 | 13   | Progressive web apps                                         |                               |
 |      | -                                                            |                               |
 | 14   | *Project 2, User testing*                                    | TE 2 (2019-01-10)             |
-| 15   | *Project 2, User testing*                                    | Project 2 (2019-01-20)        |
+| 15   | *Project 2, User testing*                                    | Project 2 (2019-01-20, 23:59) |
 | 16   | *Presentations*                                              |                               |
 
 
