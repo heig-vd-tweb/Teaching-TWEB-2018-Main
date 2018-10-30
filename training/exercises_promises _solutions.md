@@ -6,7 +6,7 @@ const p1 = new Promise(function(resolve, reject) {
   resolve();
 });
 p1.then(function() { console.log('1'); });
-// Answer:
+// Answer: 2 1
 ```
 
 2\)
@@ -15,7 +15,7 @@ function f1() { console.log('U'); }
 const f2 = () => new Promise((success) => success('A'));
 f1();
 f2().then((value) => { console.log(value); f1(); });
-// Answer:
+// Answer: U A U
 ```
 
 3\)
@@ -26,7 +26,7 @@ const f3 = () => console.log('A');
 const f4 = () => console.log('H🐰');
 
 f1().then(f2).then((v) => { f3(); console.log(v); f4(); });
-// Answer:
+// Answer: A SF H🐰
 ```
 
 4\)
@@ -37,7 +37,7 @@ const p3 = (data2) => new Promise((resolve) => resolve('H'));
 const p4 = (data2) => new Promise((resolve) => resolve(data2 + '♥'));
 
 p1('R').then(p2).then(p3).then(p4).then(console.log);
-// Answer:
+// Answer: H♥
 ```
 
 5\)
@@ -46,7 +46,7 @@ let promise = new Promise((resolve) => resolve());
 promise.then(value => console.log(1));
 console.log(2);
 console.log(3);
-// Answer:
+// Answer: 2 3 1
 ```
 
 6\)
@@ -60,7 +60,7 @@ let promise = new Promise((resolve) => {
 
 promise.then(() => console.log(3));
 console.log(4);
-// Answer:
+// Answer: 1243
 ```
 
 7\)
@@ -71,7 +71,7 @@ function test() {
       return data;
     });
 }
-// What does `test();`
+// What does `test();` return? => undefined
 ```
 
 8\)
@@ -82,7 +82,7 @@ function test() {
       return data;
     });
 }
-// What does `test();`
+// What does `test();` return? => a promise
 ```
 
 9\)
@@ -93,7 +93,7 @@ Promise.resolve()
   () => { console.log('catch 1'); },
 )
 .catch(() => { console.log('catch 2')});
-// Answer:
+// Answer: catch 2
 ```
 
 10\)
@@ -101,7 +101,7 @@ Promise.resolve()
 const p1 = (data) => new Promise((resolve, reject) => data > 2 ? resolve('A') : reject('Z'));
 p1(1).then(z => console.log('O'), a => console.log('U'));
 p1(5).then(z => console.log('O'), a => console.log('U'));
-// Answer:
+// Answer: U O
 ```
 
 11\)
@@ -109,7 +109,7 @@ p1(5).then(z => console.log('O'), a => console.log('U'));
 new Promise((resolve) => { throw new Error('Woups'); })
   .catch(error => console.log(error.message))
   .then(() => console.log('done'));
-// Answer:
+// Answer: Woups done
 ```
 
 12\)
@@ -119,7 +119,8 @@ function getValue() {
   return new Promise((resolve) => resolve(2))
 }
 getValue().then(v => console.log('the value is ' + v));
-
+// TypeError!
+// How to fix it ? Promise.resolve(1), Promise.resolve(getValue())
 ```
 
 13\)
@@ -127,7 +128,7 @@ getValue().then(v => console.log('the value is ' + v));
 for (var i = 0; i < 3; ++i) {
   setTimeout(() => { console.log(i) }, 100);
 }
-// Answer:
+// Answer: 333 => the synchronous loop is totally executed before the asynchronous code.
 ```
 
 14\)
@@ -140,7 +141,7 @@ for (let i = 0; i < 3; ++i) {
 }
 
 console.log(a);
-// Answer:
+// Answer: 0 => use Promise.all
 ```
 
 15\)
@@ -155,5 +156,5 @@ app.get('/', (req, res) => {
   sendLoggingData(req).then(() => console.log('data sent!'));
   res.send('ok');
 });
-// What is happening here?
+// What is happening here? 'ok' is sent, then the server CRASHES.
 ```
