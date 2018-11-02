@@ -506,6 +506,65 @@ class TodoApp extends React.Component {
 [![Edit React use state + events + composition](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/k1555wr2v)
 
 ---
+### Containment
+
+Some components don’t know their children ahead of time. This is especially common for components like Sidebar, Dialog or Layout that represent generic “boxes”.
+
+For this, you have access to a special prop called `children`.
+
+```js
+function Layout(props) {
+  return (
+    <div>
+      <h2>{props.title}</h2>
+*     {props.children}
+    </div>
+  );
+}
+```
+
+```html
+<Layout title="Layout example">
+* The content
+</Layout>
+```
+
+.footnote[Read more: https://reactjs.org/docs/composition-vs-inheritance.html]
+
+---
+### Containment example
+
+.smaller[
+Here is an example of how we can use the `Layout` component we defined earlier for to wrap our
+todo list.
+
+```js
+// index.js
+class TodoApp extends React.Component {
+  /*...*/
+  render() {
+    return (
+*     <Layout title="Todos">
+        <ol>
+          {this.state.items.map(item => (
+            <TodoItem
+              key={item.id}
+              text={item.text}
+              done={item.done}
+              onRemove={() => this.handleRemove(item.id)}
+            />
+          ))}
+        </ol>
+*     </Layout>
+    );
+  }
+}
+```
+]
+
+[![Edit React use state + events + composition](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/mjw4jlr169)
+
+---
 exclude: true
 ### Concepts you should understand
 
