@@ -21,10 +21,10 @@ In the second part of the course (week 6 -16) we will look at many tools, framew
 | 4    | [Data persistence](https://heig-vd-tweb.github.io/Teaching-TWEB-2018-Main/slides/2018/04-data-persistence#1) |                               |
 | 5    | *Project 1*                                                  |                               |
 |      | -                                                            | Project 1 (2018-10-28, 23:59) |
-| 6    | Frameworks - React                                           | TE 1 (2018-11-01)             |
+| 6    | [Frameworks - React](https://heig-vd-tweb.github.io/Teaching-TWEB-2018-Main/slides/2018/06-frameworks#1)                                           | TE 1 (2018-11-01)             |
 | 7    | Introduction to GraphQL                                      |                               |
-| 8    | Engaging interactive UI                                      | Lab 2 (2018-11-06, 23:59)     |
-| 9    | Modern development environment                               | Lab 3 (2018-11-13, 23:59)     |
+| 8    | Engaging interactive UI                                      | [Lab 2 (2018-11-13, 23:59)](https://github.com/heig-vd-tweb/Teaching-TWEB-2018-Labo2)     |
+| 9    | Modern development environment                               | Lab 3 (2018-11-20, 23:59)     |
 | 10   | Fullstack Graphql                                            |                               |
 | 11   | Thinking in components                                       |                               |
 | 12   | User experience patterns                                     |                               |
