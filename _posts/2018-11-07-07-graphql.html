@@ -1,0 +1,629 @@
+---
+title: GraphQL
+date: 2018-10-18 07:17:00 +0200
+categories: slides
+excerpt: |
+  Graphql has been a complete game changer to the way we think about data. We'll Learn the basic concepts of Graphql and compare it to traditional REST API. Graphql has a really huge ecosystem with amazing tools that will help us being more productive while shipping a better experience to our users.
+---
+layout:true
+class: middle, left
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+# GraphQL
+.subheading[The new standard for API development]
+
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+class: middle, center
+## What is an API?
+
+.bigger[
+An API is an interface that let programmers interact with data. When you design an API, always think about **developer experience**.
+]
+
+---
+name: rest-apis
+## REST APIs
+
+.bigger[
+REST is an architectural concept for network based software.
+
+It has become a standard for designing web APIs.
+- stateless servers
+- structured access to resources
+- support any type of resources
+- language agnostic
+]
+
+---
+### How it feels to design a REST API?
+
+.bigger[
+As REST is just a **concept/style** we have a lot of freedom. A common mistake is to design an API according to the views of **one specific** client application.
+
+To solve this we need to follow best practices and think ahead.
+
+- Define a good structure for our endpoints
+- Define what information to return for different type of resources
+- Think about features (sorting, filtering, etc..)
+- Maintain a good documentation and provide examples
+- and more.. 
+]
+
+---
+### REST and Endpoints
+
+A well structured endpoints provide a clear and consistent interface.
+Giants like Twitter, Facebook, Google and **Github** are often an inspiration for other companies.
+
+```sh
+/users
+/users/:username
+/users/:username/followers
+/users/:username/repos
+/repos/:owner/:repo/issues
+/repos/:owner/:repo/issues/:number
+...
+```
+
+---
+### REST and Granularity
+
+We need to make choices about what fields to return for each type of resource.
+
+
+```sh
+GET https://api.github.com/repos/facebook/react/issues/14139
+```
+
+```json
+{
+  "id": 378458607,
+  "state": "open",
+  "number": 14139,
+  "title": "Tapping outside of an input on iOS does not fire...",
+  "user": {
+    // What should we include here ?
+    // There is endpoint for this !
+  },
+  "body": "...",  // Can I have an excerpt instead ?
+  "created_at": "2018-11-07T20:35:47Z",
+
+  ... +10 more fields // Do I really need more fields ?
+}
+```
+
+---
+### REST and HATEOAS
+
+It is also a good practice to provides users with the means to explore the API more deeply.
+
+That's what HATEOAS (Hypermedia As The Engine Of Application State) does.
+
+.smaller[
+```sh
+GET https://api.github.com/repos/facebook/react/issues/14139
+```
+
+```json
+{
+  "state": "open",
+  "id": 378458607,
+  "number": 14139,
+  "title": "Tapping outside of an input on iOS does not fire onBlur event",
+  "user": { ... },
+  "body": "...",
+  "created_at": "2018-11-07T20:35:47Z",
+  "url": "https://api.github.com/repos/facebook/react/issues/14139",
+* "repository_url": "https://api.github.com/repos/facebook/react",
+* "comments_url": "https://api.github.com/repos/facebook/react/issues/14139/comments",
+* "events_url": "https://api.github.com/repos/facebook/react/issues/14139/events",
+
+  ... +10 more fields
+}
+```
+]
+
+---
+### REST and Documentation
+
+.row[
+  .col.padding-right[
+<img src="{{site.baseurl}}/images/07-github-api-documentation.png" width="400px" />
+  ]
+
+  .col.flex[
+- Document advanced features: sorting, filtering, pagination, HTTP Methods, etc..
+- Provide responses example
+  ]
+]
+
+---
+name: how-it-feels-rest
+### How it feels to consume a REST API?
+
+.smaller[
+```js
+async function getOpenIssues() {
+  const repo = await request('https://api.github.com/repos/facebook/react');
+  const issues = await request('https://api.github.com/repos/facebook/react/issues');
+
+  return {
+    count: repo.open_issues_count,
+    issues: await Promise.all(issues.map(async issue => {
+      const comments = await request(issue.comments_url);
+
+      return {
+        title: issue.title,
+        author: {
+          login: issue.user.login,
+          avatar: issue.user.avatar_url,
+        },
+        body: issue.body,
+        state: issue.state,
+        date: issue.created_at,
+        comments: comments.map(comment => ({
+          author: {
+            login: comment.user.login,
+            avatar: comment.user.avatar_url,
+          },
+          body: comment.body,
+          date: comment.created_at,
+        })),
+      };
+    })),
+  };
+}
+```
+]
+
+---
+### How it feels to consume a REST API
+
+In the previous example we used [Github's REST API](https://developer.github.com/v3/) to fetch the last 30 issues from the [React repository](https://github.com/facebook/react/issues)
+
+This is what we can conclude:
+- **Multiple requests** are necessary to get the data we need
+  - We sent 32 requests in total
+  - Pagination and rate limiting were out of the scope for this example. But we should handle that too 🤫
+- As we were not interested in all data, **65%** of the data received by Github were **wasted**
+  (~130 KB used, ~380 KB received) 😭
+- Note that we also had to spend time reading the documentation
+
+---
+class:middle, center
+
+## Convinced ?
+
+<iframe style="margin-top: 16px" src="https://giphy.com/embed/kEaY8VGOj3gfK5FOpJ" width="480" height="377" frameBorder="0"></iframe>
+
+---
+### Github's thoughts
+
+.x[
+> The REST API is responsible for over 60% of the requests made to our database tier. This is partly because, by its nature, **hypermedia navigation** requires a client to **repeatedly communicate** with a server so that it can get all the information it needs.
+]
+
+.x[
+> We heard from integrators that our REST API also **wasn’t very flexible**.
+]
+
+.x[
+> It seemed like our responses simultaneously sent **too much data** and **didn’t include data that consumers needed**.
+]
+
+.x[
+> We wanted to be smarter about how our resources were **paginated**. We wanted assurances of **type-safety** for user-supplied parameters. We wanted to generate **documentation** from our code
+]
+
+.x[
+> We studied a variety of API specifications built to make some of this easier, but we found that **none of the standards totally matched our requirements**.
+]
+
+---
+class: middle, center
+
+### Github's thoughts
+
+.bigger[
+> ...And then we learned about **GraphQL**.
+
+.footnote[https://githubengineering.com/the-github-graphql-api/]
+]
+
+---
+## GraphQL
+
+<a href="https://www.graphql.org/">
+  <img src="{{site.baseurl}}/images/07-graphql-introduction.png" width="100%" />
+</a>
+
+- GraphQL is a new API standard that provides a more efficient, powerful and flexible alternative to REST
+- It is a **Q**uery **L**anguage for **APIs** (not databases)
+- It's not only for React developers
+- It was developed and open-sourced by Facebook
+
+.footnote[https://www.graphql.org/]
+
+---
+## GraphQL
+
+<figure style="margin-left: 0">
+  <img src="{{site.baseurl}}/images/07-graphql-burger-comparison.jpg" height="470px" />
+  <figcaption class="smaller">
+    <a href="https://apievangelist.com/2018/06/29/rest-api-and-graphql-burger-king/">
+      https://apievangelist.com/2018/06/29/rest-api-and-graphql-burger-king/
+    </a>
+  </figcaption>
+</figure>
+
+---
+### Graph*i*QL
+
+[GraphiQL](https://github.com/graphql/graphiql) is an in-browser tool for writing, validating, and testing GraphQL queries. 
+
+<img src="{{site.baseurl}}/images/07-graphiql.png" height="450px" />
+
+---
+### IDE integration
+
+<img src="{{site.baseurl}}/images/07-graphql-intellisense.gif" width="100%" />
+
+.footnote[https://www.prisma.io/blog/vscode-thieghu7shoo/]
+
+---
+### How it feels to consume a GraphQL API?
+
+.smaller[
+```javascript
+query {
+  repository(owner: "facebook", name: "react") {
+    issues(first: 10) {
+      totalCount
+      edges {
+        cursor
+        node {
+          title
+          state
+          author { login avatarUrl }
+          body
+          createdAt
+          comments(first: 3) {
+            totalCount
+            edges {
+              node {
+                author {
+                  login
+                  avatarUrl
+                }
+                body
+                createdAt
+              }
+            }
+          }
+        }
+      }
+    }
+  }  
+}
+```
+]
+
+.smaller[Copy this example in [Github's Graphql Explorer](https://developer.github.com/v4/explorer/)]
+
+---
+### How it feels to consume a GraphQL API
+
+The previous query uses GraphQL to ask exactly the same information as earlier in [how it feels to consume a REST API](#how-it-feels-rest).
+
+Comparing to REST, we can conclude that GraphQL is:
+
+- **self-documented** — we get predictable responses
+- **less chatty** — only 1 request is need to get all the data we need
+- **more efficient** — 0 bytes were wasted 🎉
+- **more flexible** — we can ask exactly what we need and have multiple ways to paginate results
+- **more robust** — it provide type safety
+
+
+
+---
+class:middle, center
+
+## Convinced ?
+
+<iframe style="margin-top: 16px" src="https://giphy.com/embed/3gQLiZgd5W6c2bjNfp" width="480" height="382" frameBorder="0"></iframe>
+
+
+...and this is just the beginning
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, center
+## GraphQL core concepts
+.bigger[]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+### Schema Definition – Types
+
+As an API designer you first have to define the schema of your API.
+The syntax for writing schemas is called Schema Definition Language (SDL).
+
+Here is a partial example of how Github defined the type `User`
+
+```graphql
+type User {
+  id: ID!
+  login: String!
+  email: String!
+  avatarUrl(size: Int): URI
+  repositories: [Repositories]
+}
+```
+
+.smaller[
+- This type `User` has 5 fields
+- `ID`, `String`, `Int` and `URI` are called [scalar types](https://www.graphql.org/learn/schema/#scalar-types) (equivalent of primitive types in many languages) because they don't have sub-fields
+- The `!` following the type means that this field is required.
+- `avatarUrl` is field that can take an argument `size`
+- `repositories` is an array. This is how we create one-to-many relationship
+]
+
+---
+### Schema Definition – Types
+
+Here is another example of a minimal representation of a repository
+
+```graphql
+type Repository {
+  id: ID!
+  name: String!
+  isPrivate: Boolean!
+  issues: [Issue]
+  owner: User
+}
+```
+
+- We defined a one-to-may relationship between `Repository` and `Issue`
+- We defined a relationship between the types `Repository` and `User`
+- If went further, `Issue` would also define a relation with `User`
+- There is no limit for relations and this is what makes possible to create a big Graph with our data
+
+---
+### Schema Definition – Endpoints
+
+Instead of having multiple endpoints that return fixed data structure, Graphql APIs typically expose a single/few endpoint. 
+
+```graphql
+type Query {
+  user(login: String!): User
+  repository(owner: String!, name: String!): Repository
+}
+```
+
+The type `Query` is a special type for creating endpoints. Think of them as entry-points to our Graph. Here is an example of a query that a client could send to the server
+
+.row[
+```graphql
+{
+
+  user(login: 'paulnta') {
+    id
+    login
+    avatarUrl
+  }
+}
+
+```
+
+```json
+{
+  "data": {
+    "user": {
+      "id": "MDQ6VXNlcjk1MzExODA=",
+      "login": "paulnta",
+      "avatarUrl": "https://avatars0.gith..."
+    }
+  }
+```
+]
+
+
+---
+### Schema Definition
+
+A schema is a simple collection of GraphQL types.
+
+```graphql
+type User { ... }
+type Repository { ... }
+
+*type Query { ... }
+*type Mutation { ... }
+*type Subscription { ... }
+```
+
+`Query` `Mutation` and `Subscription` are called root types because they act as entry points for requests sent by clients
+
+- `Query` - define root queries
+- `Mutation` - define queries for mutating data
+- `Subscription` - define subscriptions to data changes (websockets)
+
+---
+### Schema Definition - Queries
+
+```javascript
+fragment simpleUser on User {
+  login
+  repositories { id name }
+}
+
+{
+  paulnta: user(login: 'paulnta') {
+    ...simpleUser
+  }
+  edri: user(login: 'edri') {
+    ...simpleUser
+  }
+}
+```
+
+- We defined a `fragment` on the type `User`. Fragments are reusable units that lets you construct as set of fields
+- GraphQL support request batching. We made two requests in a single query.
+- It's possible to create aliases for any field `paulnta` and `edri` instead of `user`.
+
+.footnote[https://www.graphql.org/learn/queries/]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, center
+name: data-fetching-client
+## Data fetching from client app
+.bigger[]
+
+---
+layout:true
+.breadcrumbs[[Data fetching from client app](#data-fetching-client)]
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+## Data fetching from client app
+
+There is generally to different approaches for fetching data from a client app
+
+**Using plain HTTP**
+- All you need to do is sending a POST request with your GraphQL query inside the body
+- GET request are supported to (the query is placed in query string parameters)
+
+**Using a client library** .badge[recommended]
+- Provides a good abstraction and lets you focused on the most important — your app !
+- You don't have to worry about lower-level networking details 
+- It comes with really powerful features !
+
+---
+## Client Libraries
+
+<a href="https://facebook.github.io/relay/">
+  <img src="{{site.baseurl}}/images/07-relay-logo.svg" width="120px"/>
+</a>
+
+[Relay](https://facebook.github.io/relay/) is Facebook’s homegrown GraphQL client that they open-sourced alongside GraphQL in 2015.
+    
+Relay is heavily **optimized for performance**. It started out as a routing framework that got combined with data loading responsibilities. The performance benefits of Relay come at the cost of a **notable learning curve**
+
+.footnote[https://facebook.github.io/relay/]
+
+---
+## Client libraries
+
+<a href="https://www.apollographql.com/client/">
+  <img src="{{site.baseurl}}/images/07-apollo-logo.svg" height="120px" />
+</a>
+
+.badge[recommended]
+
+[Apollo Client](https://www.apollographql.com/client/) is a community-driven effort to build an **easy-to-understand**, flexible and powerful GraphQL client. 
+
+Right now there is a JavaScript client with bindings for popular frameworks like React, Angular, Ember or Vue as well as early versions of iOS and Android clients. 
+
+Apollo is **production-ready** and has handy features like caching, optimistic UI, subscription support and many more.
+
+.footnote[https://www.apollographql.com/client/]
+
+---
+### React Apollo basic concept
+
+.smaller[
+With React apollo you use `Query` components in order to fetch GraphQL data and attach result to your UI.
+
+```js
+import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
+
+const GET_CURRENT_USER = gql`
+  viewer {
+    login
+    name
+  }
+`
+
+const CurrentUser = () => (
+  <Query query={GET_CURRENT_USER}>
+    {({ loading, error, data }) => {
+      if (loading) return "Loading..."
+      if (error) return `Error! ${error.message}`
+
+      const { viewer } = data; 
+      return (
+        <div>
+          {viewer.name} {viewer.login}
+        </div>
+      )
+    }}
+  </Query>
+)
+```
+]
+
+---
+### React Apollo advanced concepts
+
+React apollo helps you implement first-class features
+- caching
+- mutations
+- optimistic UI
+- subscriptions
+- pagination
+- server-side rendering
+- prefetching
+- and more..
+
+---
+### React apollo starter
+
+<a href="https://github.com/heig-vd-tweb/react-apollo-starter">
+  <img src="{{site.baseurl}}/images/07-react-apollo-starter.png" height="480px" />
+</a>
+
+.footnote[https://github.com/heig-vd-tweb/react-apollo-starter]
+
+---
+### React apollo documentation
+
+<a href="https://www.apollographql.com/docs/react/">
+  <img src="{{site.baseurl}}/images/07-react-apollo-doc.png" height="480px" />
+</a>
+
+.footnote[https://www.apollographql.com/docs/react/]
+
+---
+### References - Graphql tutorials
+
+<a href="https://www.howtographql.com/">
+  <img src="{{site.baseurl}}/images/07-how-to-graphql.png" width="100%" />
+</a>
+
+.footnote[https://www.howtographql.com/]
+
+---
+### References - Graphql documentation
+
+<a href="https://graphql.org/">
+  <img src="{{site.baseurl}}/images/07-graphql-org.png" width="100%" />
+</a>
+
+.footnote[https://graphql.org/]

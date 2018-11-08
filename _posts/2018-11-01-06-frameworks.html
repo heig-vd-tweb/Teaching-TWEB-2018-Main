@@ -3,7 +3,8 @@ title: Front-end frameworks
 date: 2018-10-18 07:17:00 +0200
 categories: slides
 excerpt: |
-  Meet Component-based development !
+  Building UIs is hard, especially when it comes to manage our application state and synchronize it with the DOM.
+  Back in the days, we used tools like JQuery which did a really good job. Our projects becoming more complex, we need a more modular code base — Meet Component-based development !
 ---
 layout:true
 class: middle, left
@@ -389,6 +390,7 @@ class TodoApp extends React.Component {
 ---
 ### Updating Component State
 
+.smaller[
 **Do Not Modify State Directly.** The only way to update a component's state is to use `this.setState()`.
 
 This will not re-render a component
@@ -408,6 +410,21 @@ this.setState({ items: [] })
 this.setState((state, props) => ({
   items: [...state.items, newItem]
 }))
+```
+]
+
+---
+### Immutability
+
+In React, `this.state` is treated as if it were immutable. When you update a part of the state, it must have a new reference.
+
+A solution is to create copies of the objects in this.state and manipulate the copies, assigning them back using setState()
+```js
+const items = ['Angular', 'Vue']
+const updatedItems = items;
+updatedItems.push('React');
+items === updatedItems // true !
+this.setState({ items: updatedItems })
 ```
 
 ---
