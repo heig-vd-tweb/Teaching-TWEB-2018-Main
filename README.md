@@ -24,7 +24,7 @@ In the second part of the course (week 6 -16) we will look at many tools, framew
 | 6    | [Frameworks - React](https://heig-vd-tweb.github.io/Teaching-TWEB-2018-Main/slides/2018/06-frameworks#1)                                           | TE 1 (2018-11-01)             |
 | 7    | Introduction to GraphQL                                      |                               |
 | 8    | James talk                                      | [Lab 2 (2018-11-13, 23:59)](https://github.com/heig-vd-tweb/Teaching-TWEB-2018-Labo2)     |
-| 9    | Engaging interactive UI                               | Lab 3 (2018-11-22, 13:15)     |
+| 9    | Engaging interactive UI                               | [Lab 3 (2018-11-22, 13:15)](https://github.com/heig-vd-tweb/Teaching-TWEB-2018-Labo2#objectives-part-22)     |
 | 10   | Fullstack Graphql                                            |                               |
 | 11   | Thinking in components                                       |                               |
 | 12   | User experience patterns                                     |                               |
