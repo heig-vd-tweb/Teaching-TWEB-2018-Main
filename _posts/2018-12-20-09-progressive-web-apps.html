@@ -1,0 +1,355 @@
+---
+title: Progressive web apps
+date: 2018-10-18 07:17:00 +0200
+categories: slides
+excerpt: |
+  Progressive Web Apps are built on web standards called Service Workers, HTTPS, and Web App Manifests. Service Workers let developers build websites that can work when there’s no network. The Web App Manifest lets users do things like pin the app to their home screens, or interact with web apps as if they were native.
+---
+layout:true
+class: middle, left
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+# Progressive web apps
+.subheading[The web, today]
+
+---
+class: middle, center
+## What are the challenges we are facing today with native and web apps ?
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+## Challenges
+
+.bigger[
+- **Internet speed** - 60% of the world’s population is still using 2G internet
+- **Slow website load** - 53% of users will abandon a site if it takes longer than 3 seconds to load.
+- **High friction** - An average user installs 0 applications in a month.
+- **User engagement** — Users spend most of their time in native apps, but mobile web reach is almost three times that of native apps
+]
+
+---
+## Web vs Mobile
+
+<img src="{{site.baseurl}}/images/09-time-spent.png" width="100%" height="auto" />
+
+.footnote[https://www.comscore.com/]
+
+---
+## Web vs Mobile
+
+<img src="{{site.baseurl}}/images/09-audience.png" width="100%" height="auto" />
+
+.footnote[https://www.comscore.com/]
+
+
+---
+
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo-full.svg" />
+
+---
+class: middle, center
+## Progressive web apps, the best of both worlds
+.bigger[\#Reliable, #Fast, #Engaging]
+
+---
+layout:true
+<img class="logo" src="{{site.baseurl}}/images/logo.svg" />
+
+---
+### Reliable
+
+- **Load instantly** and never show the downasaur, even in uncertain network conditions.
+- When launched from the user’s home screen, **service workers** enable a Progressive Web App to load instantly, regardless of the network state.
+- A service worker, written in JavaScript, is like a **client-side proxy** and puts you in control of the cache and how to respond to resource requests
+- By **pre-caching** key resources you can eliminate the dependence on the network, ensuring an instant and reliable experience for your users.
+
+---
+### Engaging
+
+- Progressive Web Apps are **installable** and live on the user's home screen, without the need for an app store
+- Can re-engage users with web push **notifications**.
+- The **Web App Manifest** allows you to control how your app appears and how it's launched
+- You can specify home screen **icons**, the page to load when the app is launched
+- You can specify whether or not to show the **browser chrome**.
+
+
+---
+### Fast
+
+- PWAs provide experiences that are **consistently fast**
+- The first time, Loads in less than **3 secondes**
+- Once loaded, users expect them to be fast – no *janky* scrolling or *slow-to-respond* interfaces.
+
+
+---
+## Lighthouse
+
+Audit for performance, accessibility, progressive web apps, and more.
+
+<a href="https://developers.google.com/web/tools/lighthouse/">
+<figure>
+  <img src="{{site.baseurl}}/images/09-lighthouse.png" height="430px" />
+</figure>
+</a>
+
+.footnote[https://developers.google.com/web/tools/lighthouse/]
+---
+name: add-to-home-screen
+## Add to home screen
+
+<img src="{{site.baseurl}}/images/09-manifest.png" width="100%" />
+
+---
+### Features
+.breadcrumbs[[Add to Home Screen](#add-to-home-screen)]
+
+- User can be prompted to Add to Homescreen
+- The app is loaded with a splash screen
+- The theme is customized to match the brand colors
+
+---
+### How it works
+.breadcrumbs[[Add to Home Screen](#add-to-home-screen)]
+
+Create a `manifest.json` file for a progressive web app.
+```json
+{
+  "name": "React HN",
+  "short_name": "React HN",
+  "icons": [{
+      "src": "img/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }, {
+      "src": "img/splashscreen-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+  }],
+  "start_url": "./?utm_source=web_app_manifest",
+  "background_color": "#4CC1FC",
+  "display": "standalone",
+  "theme_color": "#222222"
+}
+```
+
+---
+### How it works
+.breadcrumbs[[Add to Home Screen](#add-to-home-screen)]
+
+When you have created the manifest, add a link tag in the `head` of your page to reference it:
+
+```html
+<link rel="manifest" href="/manifest.json">
+```
+
+**That's it !**
+
+---
+### Manifest generator
+.breadcrumbs[[Add to Home Screen](#add-to-home-screen)]
+
+<a href="https://app-manifest.firebaseapp.com/">
+<img src="{{site.baseurl}}/images/09-manifest-generator.png" width="100%" />
+</a>
+
+.footnote[https://app-manifest.firebaseapp.com/]
+
+---
+### Debugging
+.breadcrumbs[[Add to Home Screen](#add-to-home-screen)]
+
+<img src="{{site.baseurl}}/images/09-manifest-devtool.jpeg" width="100%" />
+
+
+---
+name: mobile-friendly
+## Design is mobile-friendly
+
+<a href="https://housing.com">
+  <img src="{{site.baseurl}}/images/09-mobile-friendly.jpeg" width="100%" />
+</a>
+
+.footnote[https://housing.com]
+
+---
+## How ?
+.breadcrumbs[[Design is mobile-friendly](#mobile-friendly)]
+
+- Apps optimized for multiple devices should include a meta-viewport in the <head> of their document:
+.smaller[
+  ```html
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  ```
+]
+
+- Adapt the layout depending on the device width
+  - [with css media queries](https://mediaqueri.es/)
+  - [by sniffing the userAgent on the server](https://github.com)
+  - or using different urls for mobile/desktop layout
+
+---
+name: page-load
+## Ensure page load is fast
+
+<img src="{{site.baseurl}}/images/09-page-load.png" width="100%" />
+
+.footnote[https://medium.com/@addyosmani/progressive-web-apps-with-react-js-part-2-page-load-performance-33b932d97cf2]
+
+---
+### Key performance indicator
+.breadcrumbs[[Ensure page load is fast](#page-load)]
+
+.bigger[
+- [First meaningful paint](https://www.quora.com/What-does-First-Meaningful-Paint-mean-in-Web-Performance) - when is the main content of the page visible
+- [Speed Index](https://sites.google.com/a/webpagetest.org/docs/using-webpagetest/metrics/speed-index) - visual completeness
+- [Estimated Input Latency](https://developers.google.com/web/tools/lighthouse/audits/estimated-input-latency) - when is the main thread available to immediately handle user input
+- [Time To Interactive](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive) - how soon is the app usable & engagable
+
+> Goals: Be interactive in < 5s on first visit & < 2s on repeat visits once a Service Worker is active.
+]
+
+---
+### Performance timeline
+.breadcrumbs[[Ensure page load is fast](#page-load)]
+
+<img src="{{site.baseurl}}/images/09-chrome-timeline.png" width="100%" />
+
+---
+### Optimizations @Flipkart
+.breadcrumbs[[Ensure page load is fast](#page-load)]
+
+<blockquote class="twitter-tweet" data-cards="hidden" data-lang="en">
+
+<p lang="en" dir="ltr">In case you missed this one, here is the before and after of our timeline! <a href="https://t.co/XFfRlM6xTg">pic.twitter.com/XFfRlM6xTg</a>
+
+<img src="{{site.baseurl}}/images/09-timeline-perf.jpg" height="400px" />
+
+</p>&mdash; Abhinav Rastogi (@_abhinavrastogi)
+
+<a href="https://twitter.com/_abhinavrastogi/status/771826390656163841?ref_src=twsrc%5Etfw">September 2, 2016</a>
+</blockquote>
+
+
+---
+name: load-instantly
+## Load instantly
+
+<img src="{{site.baseurl}}/images/09-first-repeat-visit.png" width="100%" />
+
+---
+### Service worker 🎉
+
+.bigger[
+A [service worker](https://developers.google.com/web/fundamentals/primers/service-workers/) is a background worker that acts as a programmable proxy, allowing us to control what happens on a request-by-request basis. We can use it to make (parts of, or even entire) web apps work offline.
+
+It enables nice features:
+- [Push API](https://developers.google.com/web/fundamentals/push-notifications/) – A server can send push messages to a web even if the web app or browser are not running
+- [Background Sync](https://developers.google.com/web/updates/2015/12/background-sync?hl=en) - For deferring actions until the user has stable connectivity
+]
+
+---
+### Service worker life
+
+Each service worker goes through three steps in its lifecycle:
+
+- **Registration** – informs the browser where your service worker is located and lets it know it can start installing in the background
+- **Installation** – caches the static assets for the page
+- **Activation** - starts taking control of the page
+
+
+---
+### Service worker life
+
+<img src="{{site.baseurl}}/images/09-sw-lifecycle.png" width="100%" />
+
+---
+### Service worker registration
+
+Basic registration in your `index.html` could look like this:
+
+.smaller[
+```html
+<script>
+// Check for browser support of service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(function(registration) {
+      // Successful registration
+    })
+    .catch(function(err) {
+      // Failed registration, service worker won’t be installed
+    });
+</script>
+```
+]
+
+---
+### Service worker installation
+
+```js
+// service-worker.js
+self.addEventListener('install', (event) => {
+  event.waitUntil(async function() {
+    const cache = await caches.open('mysite-static-v3');
+    await cache.addAll([
+      '/css/whatever-v3.css',
+      '/css/imgs/sprites-v6.png',
+      '/css/fonts/whatever-v8.woff',
+      '/js/all-min-v4.js'
+      // etc
+    ]);
+  }());
+});
+```
+
+---
+### Service worker activation (intercepting requests)
+
+When a service worker controls a page, it can intercept each request being made by the page and decide what to do with it.
+
+```js
+self.addEventListener('fetch', function(event) {
+    console.log(event.request.url);
+    event.respondWith(
+        caches.match(event.request).then(function(response) {
+            return response || fetch(event.request);
+        })
+    );
+});
+```
+
+[Learn more with examples](https://jakearchibald.com/2014/offline-cookbook/)
+
+
+---
+### Workbox
+
+<a href="https://developers.google.com/web/tools/workbox/">
+<img src="{{site.baseurl}}/images/09-workbox.png" width="100%" />
+</a>
+
+.footnote[https://developers.google.com/web/tools/workbox/]
+
+---
+## Progressive web app demo
+
+<img src="{{site.baseurl}}/images/09-screenshot.png" height="400px" />
+
+Github: https://github.com/heig-vd-tweb/react-pwa
+
+Live demo: https://pwa-demo-iowzpnxasa.now.sh/
+
+---
+## Awesome resources
+
+**Progressive Web Apps with React.js** by Addy Osmani
+- [Introduction](https://medium.com/@addyosmani/progressive-web-apps-with-react-js-part-i-introduction-50679aef2b12?source=user_profile---------13----------------)
+- [Performance](https://medium.com/@addyosmani/progressive-web-apps-with-react-js-part-2-page-load-performance-33b932d97cf2?source=user_profile---------12----------------)
+- [Offline and network resilience](https://medium.com/@addyosmani/progressive-web-apps-with-react-js-part-3-offline-support-and-network-resilience-c84db889162c?source=user_profile---------11----------------)
+- [Progressive enhancement](https://medium.com/@addyosmani/progressive-web-apps-with-react-js-part-4-site-is-progressively-enhanced-b5ad7cf7a447?source=user_profile---------10----------------)
+- [A React and Preact Case PWA Study](https://medium.com/dev-channel/treebo-a-react-and-preact-progressive-web-app-performance-case-study-5e4f450d5299?source=user_profile---------2----------------)
